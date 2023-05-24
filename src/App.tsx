@@ -1,9 +1,12 @@
+import { Route, Routes } from "react-router-dom";
+import MainPage from "./pages/MainPage";
+
 const App = () => {
   return (
     <>
-      <div>
-        all working
-      </div>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+      </Routes>
     </>
   )
 }
