@@ -46,7 +46,7 @@ const RegistrationForm = () => {
               required
               fullWidth
               id="nickname"
-              label="Nickname"
+              label="Login (Nickname)"
               name="nickname"
               autoFocus
             />
