@@ -57,7 +57,6 @@ const RegistrationForm = () => {
               id="email"
               label="E-mail"
               name="email"
-              autoFocus
             />
             <TextField
               margin="normal"
