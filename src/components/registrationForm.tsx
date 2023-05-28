@@ -8,10 +8,15 @@ import {
   ThemeProvider,
   Typography,
   createTheme,
+  MenuItem,
+  Select,
+  InputLabel
 } from "@mui/material"
+import { authRegAPI } from "../store/api/authRegApi";
 
 const RegistrationForm = () => {
   const theme = createTheme();
+  const [ registration, {} ] = authRegAPI.useRegistrationMutation()
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -21,8 +26,10 @@ const RegistrationForm = () => {
       email: data.get('email')?.toString() || null,
       password: data.get('password')?.toString() || null,
       nickname: data.get('nickname')?.toString() || null,
+      age: Number(data.get('age')) || null,
+      gender: data.get('gender')?.toString() || null,
     }
-    console.log(userData)
+    registration(userData)
   }
 
   return (
@@ -67,6 +74,30 @@ const RegistrationForm = () => {
               type="password"
               id="password"
             />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="age"
+              label="Age"
+              type="number"
+              id="age"
+            />
+            <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+            <Select
+              required
+              fullWidth
+              name="gender"
+              id="gender"
+              defaultValue="male"
+            >
+              <MenuItem value="male">
+                Male
+              </MenuItem>
+              <MenuItem value="female">
+                Female
+              </MenuItem>
+            </Select>
             <Button
               type="submit"
               variant="contained"

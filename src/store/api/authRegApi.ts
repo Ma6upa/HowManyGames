@@ -6,11 +6,11 @@ interface ILoginData {
 }
 
 interface IRegistrationData {
-  email: string,
-  nickname: string,
-  password: string,
-  age: number,
-  gender: string
+  email: string | null,
+  nickname: string | null,
+  password: string | null,
+  age: number | null,
+  gender: string | null
 }
 
 export const authRegAPI = createApi({
@@ -29,7 +29,7 @@ export const authRegAPI = createApi({
     }),
     registration: build.mutation<string, IRegistrationData>({
       query: (userData) => ({
-        url: '/api/registration',
+        url: '/register',
         method: 'POST',
         body: {
           email: userData.email,
