@@ -1,12 +1,14 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { authRegAPI } from "./api/authRegApi";
 
 const rootReducer = combineReducers({
-
+  [authRegAPI.reducerPath]: authRegAPI.reducer
 })
 
 export const setupStore = () => {
   return configureStore({
-    reducer: rootReducer
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authRegAPI.middleware)
   })
 }
 
