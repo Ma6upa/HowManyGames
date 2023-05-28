@@ -9,9 +9,11 @@ import {
   Typography,
   createTheme,
 } from "@mui/material"
+import { authRegAPI } from "../store/api/authRegApi";
 
 const AuthForm = () => {
   const theme = createTheme();
+  const [ login, {} ] = authRegAPI.useLoginMutation()
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -21,7 +23,7 @@ const AuthForm = () => {
       password: data.get('password')?.toString() || null,
       nickname: data.get('nickname')?.toString() || null,
     }
-    console.log(userData)
+    login(userData)
   }
 
   return (

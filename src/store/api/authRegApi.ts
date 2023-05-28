@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 interface ILoginData {
-  nickname: string,
-  password: string
+  nickname: string | null,
+  password: string | null,
 }
 
 interface IRegistrationData {
@@ -10,7 +10,7 @@ interface IRegistrationData {
   nickname: string | null,
   password: string | null,
   age: number | null,
-  gender: string | null
+  gender: string | null,
 }
 
 export const authRegAPI = createApi({
@@ -19,7 +19,7 @@ export const authRegAPI = createApi({
   endpoints: (build) => ({
     login: build.mutation<string, ILoginData>({
       query: (userData) => ({
-        url: '/api/login',
+        url: '/login',
         method: 'POST',
         body: {
           nickname: userData.nickname,
