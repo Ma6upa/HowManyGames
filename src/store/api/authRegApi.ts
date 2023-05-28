@@ -15,7 +15,7 @@ interface IRegistrationData {
 
 export const authRegAPI = createApi({
   reducerPath: 'authRegAPI',
-  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API }),
   endpoints: (build) => ({
     login: build.mutation<string, ILoginData>({
       query: (userData) => ({
