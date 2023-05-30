@@ -1,17 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { ILoginData, IRegistrationData } from '../../interfaces/ILoginReg'
 
-interface ILoginData {
-  nickname: string | null,
-  password: string | null,
-}
 
-interface IRegistrationData {
-  email: string | null,
-  nickname: string | null,
-  password: string | null,
-  age: number | null,
-  gender: string | null,
-}
 
 export const authRegAPI = createApi({
   reducerPath: 'authRegAPI',
