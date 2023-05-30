@@ -1,7 +1,9 @@
+import GamesGrid from "../components/gamesGrid";
+
 const MainPage = () => {
   return (
     <div>
-      MainPage working
+      <GamesGrid />
     </div>
   )
 }
