@@ -12,7 +12,7 @@ export interface IGame {
   publishers: IPublisher[],
   platforms: IPlatform[],
   genres: IGenre[],
-  tags: ITag[]
+  tags: ITag[],
 }
 
 export interface IRating {
