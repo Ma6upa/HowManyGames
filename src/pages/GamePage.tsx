@@ -69,6 +69,7 @@ const GamePage = () => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
+              marginBottom: 10
             }}
           >
             <Typography component="h1" variant="h4">
@@ -80,7 +81,7 @@ const GamePage = () => {
               flexDirection: 'row'
             }}>
               <Box sx={{
-                width: '20%',
+                width: '25%',
                 left: 0,
                 display: 'flex',
                 flexDirection: 'column',
@@ -97,7 +98,7 @@ const GamePage = () => {
                 </Button>
               </Box>
               <Box sx={{
-                width: '70%',
+                width: '75%',
                 right: 0,
                 display: 'flex',
                 flexDirection: 'row',
@@ -197,6 +198,142 @@ const GamePage = () => {
                   </Card>
                 </Card>
               </Box>
+            </Box>
+            <Box sx={{
+              width: '100%'
+            }}>
+              <Card variant="outlined" style={{
+                width: '100%',
+                marginTop: 10,
+                padding: 10
+              }}>
+                <Typography variant="h5">
+                  Description
+                </Typography>
+                <Divider />
+                <Typography variant="h5">
+                  {game?.description}
+                </Typography>
+              </Card>
+            </Box>
+            <Box sx={{
+              width: '100%'
+            }}>
+              <Card variant="outlined" style={{
+                width: '100%',
+                marginTop: 10,
+                padding: '10px 10px 0px 10px'
+              }}>
+                <Typography variant="h5">
+                  DLCs
+                </Typography>
+                <Divider />
+                <div style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  padding: '10px 10px 0px 10px'
+                }}>
+                  {game?.dlcs.map((item, index) => (
+                    <div
+                      style={{
+                        marginLeft: 10,
+                        width: 150,
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}
+                      key={item.dlcGame.id}
+                    >
+                      <img src={import.meta.env.VITE_API + `/${item.dlcGame.picturePath}`} style={{
+                        width: 150,
+                        height: 200
+                      }} alt="No picture" />
+                      <Typography variant="h6">
+                        {item.dlcGame.name}
+                      </Typography>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </Box>
+            <Box sx={{
+              width: '100%'
+            }}>
+              <Card variant="outlined" style={{
+                width: '100%',
+                marginTop: 10,
+                padding: 10
+              }}>
+                <Typography variant="h5">
+                  Sytem Requirements
+                </Typography>
+                <Divider />
+                <Box sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                }}>
+                  <Card variant="outlined" style={{
+                    width: '50%',
+                    height: '100%',
+                    padding: 5
+                  }}>
+                    <Typography variant="h5">
+                      Minimal:
+                    </Typography>
+                    <Typography variant="h6">
+                      OC: {game?.systemRequirements[0].oc}
+                    </Typography>
+                    <Typography variant="h6">
+                      Processor: {game?.systemRequirements[0].processor}
+                    </Typography>
+                    <Typography variant="h6">
+                      RAM: {game?.systemRequirements[0].ram}
+                    </Typography>
+                    <Typography variant="h6">
+                      Video Card: {game?.systemRequirements[0].videoCard}
+                    </Typography>
+                    <Typography variant="h6">
+                      DirectX version: {game?.systemRequirements[0].directX}
+                    </Typography>
+                    <Typography variant="h6">
+                      Additional: {game?.systemRequirements[0].additional}
+                    </Typography>
+                    <Typography variant="h6">
+                      Hard Drive Space: {game?.systemRequirements[0].hardDriveSpace}
+                    </Typography>
+                  </Card>
+                  <Card variant="outlined" style={{
+                    width: '50%',
+                    height: '100%',
+                    padding: 5
+                  }}>
+                    <Typography variant="h5">
+                      Recommended:
+                    </Typography>
+                    <Typography variant="h6">
+                      OC: {game?.systemRequirements[1].oc}
+                    </Typography>
+                    <Typography variant="h6">
+                      Processor: {game?.systemRequirements[1].processor}
+                    </Typography>
+                    <Typography variant="h6">
+                      RAM: {game?.systemRequirements[1].ram}
+                    </Typography>
+                    <Typography variant="h6">
+                      Video Card: {game?.systemRequirements[1].videoCard}
+                    </Typography>
+                    <Typography variant="h6">
+                      DirectX version: {game?.systemRequirements[1].directX}
+                    </Typography>
+                    <Typography variant="h6">
+                      Additional: {game?.systemRequirements[1].additional}
+                    </Typography>
+                    <Typography variant="h6">
+                      Hard Drive Space: {game?.systemRequirements[1].hardDriveSpace}
+                    </Typography>
+                  </Card>
+                </Box>
+              </Card>
             </Box>
           </Box>
         )}

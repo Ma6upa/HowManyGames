@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IGame } from '../../interfaces/IGame'
+import { IGame, IGameSingle } from '../../interfaces/IGame'
 
 interface IFilters {
   pageNumber: number,
@@ -52,7 +52,7 @@ export const gamesAPI = createApi({
         }
       })
     }),
-    getGame: build.query<IGame, number>({
+    getGame: build.query<IGameSingle, number>({
       query: (id) => ({
         url: `/${id}`,
       })

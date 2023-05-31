@@ -31,7 +31,9 @@ export interface IGameSingle {
   genres: IGenre[],
   tags: ITag[],
   ageRating: IAgeRating,
-  averagePlayTime: string
+  averagePlayTime: string,
+  dlcs: IDLCArray[],
+  systemRequirements: IRequirements[]
 }
 
 export interface IRating {
@@ -94,4 +96,28 @@ export interface IPublisherSingle {
   description: string | null,
   picturePath: string | null,
   miniPicturePath: string | null,
+}
+
+export interface IDLC {
+  id: number,
+  name: string,
+  picturePath: string
+}
+
+export interface IDLCArray {
+  id: number,
+  dlcGame: IDLC
+}
+
+export interface IRequirements {
+  id: number,
+  additional: string | null,
+  directX: string | null,
+  ethernet: null,
+  hardDriveSpace: string | null,
+  oc: string | null,
+  processor: string | null,
+  ram: string | null,
+  type: string | null,
+  videoCard: string | null,
 }
