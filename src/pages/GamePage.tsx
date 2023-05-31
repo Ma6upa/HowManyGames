@@ -11,10 +11,12 @@ import {
   createTheme,
   Modal,
   Divider,
-  Card
+  Card,
+  Rating
 } from "@mui/material"
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import { useAppSelector } from "../hooks/redux";
 
 const GamePage = () => {
   const theme = createTheme();
@@ -25,6 +27,7 @@ const GamePage = () => {
   const [gameGenres, setGameGenres] = useState('Genres not found')
   const [gamePlatforms, setGamePlatforms] = useState('Platforms not found')
   const [gameTags, setGameTags] = useState('Tags not found')
+  const { user } = useAppSelector(state => state.userReducer)
 
   const handleClose = () => {
     setOpenModal(false)
@@ -88,12 +91,25 @@ const GamePage = () => {
                 <img src={import.meta.env.VITE_API + `/${game?.picturePath}`} style={{
                   width: '100%',
                 }} alt="No picture" />
-                <Button
-                  onClick={() => setOpenModal(true)}
-                  style={{ left: 0 }}
-                >
-                  Add to list +
-                </Button>
+                {!user && (
+                  <Button
+                    onClick={() => setOpenModal(true)}
+                    style={{ left: 0 }}
+                  >
+                    Add to list +
+                  </Button>
+                )}
+                {user && (
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'row'
+                  }}>
+                    <Rating name="half-rating" defaultValue={4} precision={0.5} style={{ marginTop: 2 }} />
+                    <Typography variant="h5" style={{marginLeft: 10}}>
+                      8
+                    </Typography>
+                  </div>
+                )}
               </Box>
               <Box sx={{
                 width: '75%',
