@@ -15,6 +15,25 @@ export interface IGame {
   tags: ITag[],
 }
 
+export interface IGameSingle {
+  id: number,
+  name: string,
+  picturePath: string,
+  status: string,
+  releaseDate?: string,
+  description?: string,
+  nsfw: boolean,
+  type: string,
+  rating: IRating,
+  developers: IDeveloperSingle[],
+  publishers: IPublisherSingle[],
+  platforms: IPlatform[],
+  genres: IGenre[],
+  tags: ITag[],
+  ageRating: IAgeRating,
+  averagePlayTime: string
+}
+
 export interface IRating {
   id: number,
   totalRating: number,
@@ -53,4 +72,26 @@ export interface IGenre {
 export interface ITag {
   id: number,
   name: string
+}
+
+export interface IAgeRating {
+  id: number,
+  name: string,
+  description: string | null
+}
+
+export interface IDeveloperSingle {
+  id: number,
+  name: string,
+  description: string | null,
+  picturePath: string | null,
+  miniPicturePath: string | null,
+}
+
+export interface IPublisherSingle {
+  id: number,
+  name: string,
+  description: string | null,
+  picturePath: string | null,
+  miniPicturePath: string | null,
 }
