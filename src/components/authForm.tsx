@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -11,15 +12,17 @@ import {
 } from "@mui/material"
 import { authRegAPI } from "../store/api/authRegApi";
 import { userSlice } from "../store/reducers/UserSlice";
-import { useAppDispatch } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { userAPI } from "../store/api/userApi";
 
 const AuthForm = () => {
   const theme = createTheme();
-  const [login, { }] = authRegAPI.useLoginMutation()
-  const [fetchUser, { }] = userAPI.useFetchUserMutation()
+  const [login, { }] = authRegAPI.useLoginMutation();
+  const [fetchUser, { }] = userAPI.useFetchUserMutation();
+  const { user } = useAppSelector(state => state.userReducer)
   const { addUser } = userSlice.actions;
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const parseJwt = (token: string) => {
     let base64Url = token.split('.')[1];
@@ -43,6 +46,12 @@ const AuthForm = () => {
     const userRes = await fetchUser(Number(parseJwt(res.error.data).Id))
     dispatch(addUser(userRes.data))
   }
+
+  useEffect(() => {
+    if (user) {
+      navigate(`/`)
+    }
+  }, [user])
 
   return (
     <ThemeProvider theme={theme}>
