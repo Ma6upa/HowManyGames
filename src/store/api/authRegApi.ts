@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { ILoginData, IRegistrationData } from '../../interfaces/ILoginReg'
 
-
-
 export const authRegAPI = createApi({
   reducerPath: 'authRegAPI',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API }),
