@@ -13,6 +13,7 @@ import {
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import SearchIcon from '@mui/icons-material/Search';
 import LoginIcon from '@mui/icons-material/Login';
+import GamePage from "./pages/GamePage";
 
 const App = () => {
   return (
@@ -63,6 +64,7 @@ const App = () => {
         <Route path="/" element={<MainPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/login" element={<AuthPage />} />
+        <Route path="/game/:id" element={<GamePage />} />
       </Routes>
     </>
   )
