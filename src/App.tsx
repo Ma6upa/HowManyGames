@@ -40,6 +40,11 @@ const App = () => {
     return JSON.parse(jsonPayload);
   }
 
+  const logOut = () => {
+    localStorage.removeItem('token')
+    window.location.href = '/'
+  }
+
   const handleMenu = (event: React.SyntheticEvent) => {
     setAnchorEl(event.currentTarget);
   };
@@ -177,11 +182,14 @@ const App = () => {
                   </div>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginTop: 2
-                  }}>
+                  <div 
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      marginTop: 2
+                    }}
+                    onClick={() => logOut()}
+                  >
                     <LogoutIcon />
                     <Typography variant="h6" style={{
                       marginLeft: 5,
