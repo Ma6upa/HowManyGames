@@ -22,6 +22,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { userAPI } from "./store/api/userApi";
 import { userSlice } from "./store/reducers/UserSlice";
+import UserPage from "./pages/UserPage";
+import UserSettingsPage from "./pages/UserSetting";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -150,39 +152,43 @@ const App = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginTop: 2
-                  }}>
-                    <img src={import.meta.env.VITE_API + `/${user.user.picturePath}`} style={{
-                      width: 30,
-                      height: 30,
-                    }} alt="No picture" />
-                    <Typography variant="h6" style={{
-                      marginLeft: 5
+                  <Link to={'/user/' + user.user.id} style={{ textDecoration: 'none', color: 'black' }}>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      marginTop: 2
                     }}>
-                      {user.user.nickname}
-                    </Typography>
-                  </div>
+                      <img src={import.meta.env.VITE_API + `/${user.user.picturePath}`} style={{
+                        width: 30,
+                        height: 30,
+                      }} alt="No picture" />
+                      <Typography variant="h6" style={{
+                        marginLeft: 5
+                      }}>
+                        {user.user.nickname}
+                      </Typography>
+                    </div>
+                  </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginTop: 2
-                  }}>
-                    <SettingsIcon />
-                    <Typography variant="h6" style={{
-                      marginLeft: 5,
-                      marginTop: -2
+                  <Link to={'/userSettings/' + user.user.id} style={{ textDecoration: 'none', color: 'black' }}>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      marginTop: 2
                     }}>
-                      Settings
-                    </Typography>
-                  </div>
+                      <SettingsIcon />
+                      <Typography variant="h6" style={{
+                        marginLeft: 5,
+                        marginTop: -2
+                      }}>
+                        Settings
+                      </Typography>
+                    </div>
+                  </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                  <div 
+                  <div
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
@@ -203,12 +209,14 @@ const App = () => {
             </div>
           )}
         </Toolbar>
-      </AppBar>
+      </AppBar >
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/registration" element={<RegistrationPage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/game/:id" element={<GamePage />} />
+        <Route path="/user/:id" element={<UserPage />} />
+        <Route path="/userSettings/:id" element={<UserSettingsPage />} />
       </Routes>
     </>
   )
