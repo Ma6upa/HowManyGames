@@ -5,9 +5,16 @@ import { ThemeProvider } from "@emotion/react"
 import {
   Box,
   Card,
+  Checkbox,
   Container,
   CssBaseline,
+  FormControlLabel,
+  FormGroup,
   Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
   Typography,
   createTheme
 } from "@mui/material"
@@ -90,7 +97,7 @@ const GamesGrid = () => {
     nsfw,
     rating
   ])
-  
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
@@ -164,6 +171,114 @@ const GamesGrid = () => {
           )}
         </Box>
       </Container>
+      <Box sx={{
+        width: '10%',
+        right: 20,
+        top: 100,
+        diplay: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        position: 'absolute',
+      }}>
+        <InputLabel id="demo-simple-select-label">Sort By</InputLabel>
+        <Select
+          required
+          fullWidth
+          name="sortBy"
+          id="sortBy"
+          defaultValue="true"
+          onChange={(event) => {
+            setRating(JSON.parse(event.target.value))
+            console.log(event.target.value)
+          }}
+        >
+          <MenuItem value="true">
+            Rating
+          </MenuItem>
+          <MenuItem value="false">
+            Alphabet
+          </MenuItem>
+        </Select>
+        <InputLabel id="demo-simple-select-label">Status</InputLabel>
+        <Card variant="outlined" style={{
+          padding: 10
+        }}>
+          <FormGroup>
+            <FormControlLabel control={<Checkbox defaultChecked onChange={(event) => {
+              if (event.target.checked) {
+                if (!status.includes('released')) {
+                  setStatus([...status, 'released'])
+                }
+              } else {
+                if (status.includes('released')) {
+                  setStatus(status.filter(item => item !== 'released'))
+                }
+              }
+            }} />} label="Released" />
+            <FormControlLabel control={<Checkbox onChange={(event) => {
+              if (event.target.checked) {
+                if (!status.includes('announced')) {
+                  setStatus([...status, 'announced'])
+                }
+              } else {
+                if (status.includes('announced')) {
+                  setStatus(status.filter(item => item !== 'announced'))
+                }
+              }
+            }} />} label="Announced" />
+          </FormGroup>
+        </Card>
+        <InputLabel id="demo-simple-select-label">Type</InputLabel>
+        <Card variant="outlined" style={{
+          padding: 10
+        }}>
+          <FormGroup>
+            <FormControlLabel control={<Checkbox defaultChecked onChange={(event) => {
+              if (event.target.checked) {
+                if (!type.includes('game')) {
+                  setType([...type, 'game'])
+                }
+              } else {
+                if (type.includes('game')) {
+                  setType(type.filter(item => item !== 'game'))
+                }
+              }
+            }} />} label="Game" />
+            <FormControlLabel control={<Checkbox defaultChecked onChange={(event) => {
+              if (event.target.checked) {
+                if (!type.includes('dlc')) {
+                  setType([...type, 'dlc'])
+                }
+              } else {
+                if (type.includes('dlc')) {
+                  setType(type.filter(item => item !== 'dlc'))
+                }
+              }
+            }} />} label="DLC" />
+          </FormGroup>
+        </Card>
+        <InputLabel id="demo-simple-select-label">Rating</InputLabel>
+          <Card variant="outlined" style={{
+            padding: 10
+          }}>
+            <FormGroup>
+              <TextField 
+                type='number'
+                placeholder="min rating"
+                onChange={(event) => {
+                  setMinRating(Number(event.target.value))
+                }}
+              />
+              <TextField 
+                type='number'
+                placeholder="max rating"
+                onChange={(event) => {
+                  setMaxRating(Number(event.target.value))
+                }}
+              />
+            </FormGroup>
+          </Card>
+      </Box>
     </ThemeProvider>
   )
 }
