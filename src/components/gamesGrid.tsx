@@ -60,22 +60,65 @@ const GamesGrid = () => {
     setGames(data.data)
   }
 
+  const handlePrev = () => {
+    if (pageNumber > 1) setPageNubmer((pageNumber) => pageNumber - 1)
+  }
+
+  const handleNext = () => {
+    if (pageNumber < 2) setPageNubmer((pageNumber) => pageNumber + 1)
+  }
+
   useEffect(() => {
     fetchGames()
-  }, [])
-
-  useEffect(() => {
-    console.log(games)
-  }, [games])
-
+  }, [
+    pageNumber,
+    pageSize,
+    minYearOfRelease,
+    maxYearOfRelease,
+    minPlayTime,
+    maxPlayTime,
+    minRating,
+    maxRating,
+    status,
+    type,
+    genre,
+    tag,
+    platform,
+    developer,
+    publisher,
+    ageRating,
+    nsfw,
+    rating
+  ])
+  
   return (
-
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
         <CssBaseline />
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          width: 100,
+          marginTop: 8
+        }}>
+          <div onClick={() => handlePrev()}>
+            <Typography component="h3" variant="h6" style={{ cursor: 'pointer' }}>
+              prev
+            </Typography>
+          </div>
+          <Typography component="h3" variant="h6">
+            |
+          </Typography>
+          <div onClick={() => handleNext()}>
+            <Typography component="h3" variant="h6" style={{ cursor: 'pointer' }}>
+              next
+            </Typography>
+          </div>
+        </div>
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 2,
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
@@ -88,34 +131,36 @@ const GamesGrid = () => {
             </Typography>
           )}
           {!isUpdating && (
-            <Grid container spacing={4}>
-              {games.map((item, index) => (
-                <Grid item xs={4} key={item.id}>
-                  <Card variant="outlined">
-                    <img src={import.meta.env.VITE_API + `/${item.picturePath}`} style={{
-                      width: 270,
-                      height: 350,
-                    }} alt="No picture" />
-                    <Typography component="h3" variant="h6" style={{ marginLeft: 5 }}>
-                      {item.name}
-                    </Typography>
-                    <Box sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-around'
-                    }}>
-                      <Typography component="h2" variant="h6">
-                        {item.type}
+            <Box>
+              <Grid container spacing={4}>
+                {games.map((item, index) => (
+                  <Grid item xs={4} key={item.id}>
+                    <Card variant="outlined">
+                      <img src={import.meta.env.VITE_API + `/${item.picturePath}`} style={{
+                        width: 270,
+                        height: 350,
+                      }} alt="No picture" />
+                      <Typography component="h3" variant="h6" style={{ marginLeft: 5 }}>
+                        {item.name}
                       </Typography>
-                      <div style={{ width: '50%' }}></div>
-                      <Typography component="h2" variant="h6">
-                        {item.releaseDate?.split('-')[0]}
-                      </Typography>
-                    </Box>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
+                      <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-around'
+                      }}>
+                        <Typography component="h2" variant="h6">
+                          {item.type}
+                        </Typography>
+                        <div style={{ width: '50%' }}></div>
+                        <Typography component="h2" variant="h6">
+                          {item.releaseDate?.split('-')[0]}
+                        </Typography>
+                      </Box>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
           )}
         </Box>
       </Container>
