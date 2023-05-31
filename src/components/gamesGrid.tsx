@@ -627,6 +627,16 @@ const GamesGrid = () => {
             ))}
           </FormGroup>
         </Card>
+        <InputLabel id="demo-simple-select-label">NSFW</InputLabel>
+        <Card variant="outlined" style={{
+          padding: 10
+        }}>
+          <FormGroup>
+            <FormControlLabel control={<Checkbox onChange={(event) => {
+              setNsfw(event.target.checked)
+            }} />} label="NSFW" />
+          </FormGroup>
+        </Card>
       </Box>
     </ThemeProvider>
   )
