@@ -12,7 +12,9 @@ import {
   Modal,
   Divider,
   Card,
-  Rating
+  Rating,
+  Select,
+  MenuItem,
 } from "@mui/material"
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -101,13 +103,44 @@ const GamePage = () => {
                 )}
                 {user && (
                   <div style={{
-                    display: 'flex',
-                    flexDirection: 'row'
+                    width: '100%'
                   }}>
-                    <Rating name="half-rating" defaultValue={4} precision={0.5} style={{ marginTop: 2 }} />
-                    <Typography variant="h5" style={{marginLeft: 10}}>
-                      8
-                    </Typography>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '100%'
+                    }}>
+                      <Rating name="half-rating" defaultValue={4} precision={0.5} style={{ marginTop: 2 }} />
+                      <Typography variant="h5" style={{ marginLeft: 10 }}>
+                        8
+                      </Typography>
+                    </div>
+                    <div>
+                      <Select
+                        required
+                        id="sortBy"
+                        defaultValue="Planned"
+                        style={{
+                          width: '100%'
+                        }}
+                      >
+                        <MenuItem value="Planned">
+                          Planned
+                        </MenuItem>
+                        <MenuItem value="Playing">
+                          Playing
+                        </MenuItem>
+                        <MenuItem value="Completed">
+                          Completed
+                        </MenuItem>
+                        <MenuItem value="Dropped">
+                          Dropped
+                        </MenuItem>
+                        <MenuItem value="On hold">
+                          On hold
+                        </MenuItem>
+                      </Select>
+                    </div>
                   </div>
 
                 )}
@@ -170,7 +203,7 @@ const GamePage = () => {
                       display: 'flex',
                       flexDirection: 'row'
                     }}>
-                      <Rating name="half-rating" defaultValue={Math.floor(game?.rating.totalRating)/2} precision={0.5} disabled style={{ opacity: 1 }} />
+                      <Rating name="half-rating" defaultValue={Math.floor(game?.rating!.totalRating!) / 2} precision={0.5} disabled style={{ opacity: 1 }} />
                       <Typography variant="h5" style={{
                         marginLeft: 5,
                         marginTop: -3
