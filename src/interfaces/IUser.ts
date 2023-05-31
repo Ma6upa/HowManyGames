@@ -8,7 +8,7 @@ export interface IUser {
     age: number,
     gender: string,
     picturePath: string,
-    registrationDate: string,
+    registrationdDate: string,
     userRoles: IUserRole[],
   }
   favouriteGames: IGameSingle[] | null,
