@@ -14,7 +14,7 @@ import {
 
 const GamesGrid = () => {
   const [pageNumber, setPageNubmer] = useState(1)
-  const [pageSize, setPageSize] = useState(15)
+  const [pageSize, setPageSize] = useState(9)
   const [minYearOfRelease, setMinYearOfRelease] = useState(1800)
   const [maxYearOfRelease, setMaxYearOfRelease] = useState(3000)
   const [minPlayTime, setMinPlayTime] = useState(0)
@@ -87,8 +87,7 @@ const GamesGrid = () => {
               Происходит загрузка...
             </Typography>
           )}
-          {/* {!isUpdating && ( */}
-          <Box>
+          {!isUpdating && (
             <Grid container spacing={4}>
               {games.map((item, index) => (
                 <Grid item xs={4} key={item.id}>
@@ -97,7 +96,7 @@ const GamesGrid = () => {
                       width: 270,
                       height: 350,
                     }} alt="No picture" />
-                    <Typography component="h2" variant="h6" style={{ marginLeft: 5 }}>
+                    <Typography component="h3" variant="h6" style={{ marginLeft: 5 }}>
                       {item.name}
                     </Typography>
                     <Box sx={{
@@ -108,7 +107,7 @@ const GamesGrid = () => {
                       <Typography component="h2" variant="h6">
                         {item.type}
                       </Typography>
-                      <div style={{width: '50%'}}></div>
+                      <div style={{ width: '50%' }}></div>
                       <Typography component="h2" variant="h6">
                         {item.releaseDate?.split('-')[0]}
                       </Typography>
@@ -116,10 +115,8 @@ const GamesGrid = () => {
                   </Card>
                 </Grid>
               ))}
-
             </Grid>
-          </Box>
-          {/* )} */}
+          )}
         </Box>
       </Container>
     </ThemeProvider>
