@@ -596,7 +596,7 @@ const GamesGrid = () => {
         }}>
           <FormGroup>
             {developers?.map((item) => (
-               <FormControlLabel control={<Checkbox onChange={(event) => {
+               <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
                 if (event.target.checked) {
                   if (!developer.includes(item.name)) {
                     setDeveloper([...developer, item.name])
@@ -616,7 +616,7 @@ const GamesGrid = () => {
         }}>
           <FormGroup>
             {publishers?.map((item) => (
-               <FormControlLabel control={<Checkbox onChange={(event) => {
+               <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
                 if (event.target.checked) {
                   if (!publisher.includes(item.name)) {
                     setPublisher([...publisher, item.name])
