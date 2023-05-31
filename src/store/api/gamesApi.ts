@@ -51,6 +51,11 @@ export const gamesAPI = createApi({
           Rating: filters.rating,
         }
       })
+    }),
+    getGame: build.query<IGame, number>({
+      query: (id) => ({
+        url: `/${id}`,
+      })
     })
   })
 })
