@@ -13,11 +13,13 @@ import {
   Divider,
   Card
 } from "@mui/material"
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
 const GamePage = () => {
   const theme = createTheme();
   const { id } = useParams();
   const { data: game, isLoading } = gamesAPI.useGetGameQuery(Number(id))
+  const { data: reviews, isLoading: isReviewsLoading } = gamesAPI.useGetGameReviewsQuery(Number(id))
   const [openModal, setOpenModal] = useState(false)
   const [gameGenres, setGameGenres] = useState('Genres not found')
   const [gamePlatforms, setGamePlatforms] = useState('Platforms not found')
@@ -28,7 +30,6 @@ const GamePage = () => {
   }
 
   useEffect(() => {
-    console.log(game)
     let genreStr = ''
     let platformStr = ''
     let tagsStr = ''
@@ -39,10 +40,6 @@ const GamePage = () => {
     game?.tags.forEach((item, index) => index === 0 ? tagsStr = item.name : tagsStr = tagsStr + ', ' + item.name);
     setGameTags(tagsStr)
   }, [game])
-
-  useEffect(() => {
-    console.log(gameGenres)
-  }, [gameGenres])
 
   return (
     <ThemeProvider theme={theme}>
@@ -334,6 +331,83 @@ const GamePage = () => {
                   </Card>
                 </Box>
               </Card>
+            </Box>
+            <Box sx={{
+              width: '100%',
+            }}>
+              {isReviewsLoading && (<Typography variant="h3">Идет загрузка...</Typography>)}
+              {!isReviewsLoading && (
+                <Card variant="outlined" style={{
+                  width: '100%',
+                  marginTop: 10,
+                  padding: 10
+                }}>
+                  <Typography variant="h5">
+                    LAST REVIEWS:
+                  </Typography>
+                  <Divider />
+                  {reviews?.map((item, index) => (
+                    <Card variant="outlined" style={{
+                      marginTop: 15,
+                      padding: 5
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between'
+                      }}>
+                        <div style={{
+                          display: 'flex',
+                          flexDirection: 'row'
+                        }}>
+                          <img src={import.meta.env.VITE_API + `/${item.user.picturePath}`} style={{
+                            width: 50,
+                            height: 50,
+                            borderRadius: 25
+                          }} alt="No picture" />
+                          <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            marginLeft: 10
+                          }}>
+                            <Typography variant="h6" style={{ marginTop: -5 }}>
+                              {item.user.nickname}
+                            </Typography>
+                            <Typography variant="h6" style={{ marginTop: -5 }}>
+                              {item.rating} / 10
+                            </Typography>
+                          </div>
+                        </div>
+                        <div style={{ width: '70%' }}></div>
+                        <div>
+                          <Typography variant="h6">
+                            {item.publishDate}
+                          </Typography>
+                        </div>
+                      </div>
+                      <Card variant="outlined" style={{
+                        margin: 10,
+                        padding: 5
+                      }}>
+                        <Typography variant="h6" style={{ marginTop: -5 }}>
+                          {item.text}
+                        </Typography>
+                      </Card>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        right: 0,
+                        float: "right"
+                      }}>
+                        <ThumbUpOffAltIcon />
+                        <Typography variant="h6" style={{ marginTop: -5 }}>
+                          {item.reviewRating}
+                        </Typography>
+                      </div>
+                    </Card>
+                  ))}
+                </Card>
+              )}
             </Box>
           </Box>
         )}

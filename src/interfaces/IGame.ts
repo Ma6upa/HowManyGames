@@ -33,7 +33,7 @@ export interface IGameSingle {
   ageRating: IAgeRating,
   averagePlayTime: string,
   dlcs: IDLCArray[],
-  systemRequirements: IRequirements[]
+  systemRequirements: IRequirements[],
 }
 
 export interface IRating {
@@ -120,4 +120,22 @@ export interface IRequirements {
   ram: string | null,
   type: string | null,
   videoCard: string | null,
+}
+
+export interface IReview {
+  id: number,
+  user: {
+    id: number,
+    nickname: string,
+    picturePath: string,
+  },
+  game: {
+    id: number,
+    name: string,
+    picturePath: string,
+  }
+  rating: number,
+  text: string,
+  publishDate: string,
+  reviewRating: number
 }
