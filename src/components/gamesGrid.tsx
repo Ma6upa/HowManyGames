@@ -20,6 +20,7 @@ import {
 } from "@mui/material"
 import { developerAPI } from "../store/api/developerApi"
 import { publisherAPI } from "../store/api/publisherApi"
+import { Link } from "react-router-dom"
 
 const GamesGrid = () => {
   const [pageNumber, setPageNubmer] = useState(1)
@@ -146,28 +147,30 @@ const GamesGrid = () => {
               <Grid container spacing={4}>
                 {games.map((item, index) => (
                   <Grid item xs={4} key={item.id}>
-                    <Card variant="outlined">
-                      <img src={import.meta.env.VITE_API + `/${item.picturePath}`} style={{
-                        width: 270,
-                        height: 350,
-                      }} alt="No picture" />
-                      <Typography component="h3" variant="h6" style={{ marginLeft: 5 }}>
-                        {item.name}
-                      </Typography>
-                      <Box sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-around'
-                      }}>
-                        <Typography component="h2" variant="h6">
-                          {item.type}
+                    <Link to={'/game/'+item.id} style={{ textDecoration: 'none', color: 'black' }}>
+                      <Card variant="outlined">
+                        <img src={import.meta.env.VITE_API + `/${item.picturePath}`} style={{
+                          width: 270,
+                          height: 350,
+                        }} alt="No picture" />
+                        <Typography component="h3" variant="h6" style={{ marginLeft: 5 }}>
+                          {item.name}
                         </Typography>
-                        <div style={{ width: '50%' }}></div>
-                        <Typography component="h2" variant="h6">
-                          {item.releaseDate?.split('-')[0]}
-                        </Typography>
-                      </Box>
-                    </Card>
+                        <Box sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-around'
+                        }}>
+                          <Typography component="h2" variant="h6">
+                            {item.type}
+                          </Typography>
+                          <div style={{ width: '50%' }}></div>
+                          <Typography component="h2" variant="h6">
+                            {item.releaseDate?.split('-')[0]}
+                          </Typography>
+                        </Box>
+                      </Card>
+                    </Link>
                   </Grid>
                 ))}
               </Grid>
