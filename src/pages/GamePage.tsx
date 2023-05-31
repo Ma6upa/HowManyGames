@@ -109,14 +109,16 @@ const GamePage = () => {
                       8
                     </Typography>
                   </div>
+
                 )}
               </Box>
               <Box sx={{
-                width: '75%',
+                width: '72%',
                 right: 0,
                 display: 'flex',
                 flexDirection: 'row',
-                justifyContent: 'space-around'
+                justifyContent: 'space-between',
+                marginLeft: '3%'
               }}>
                 <Card variant='outlined' style={{
                   width: '30%'
@@ -164,9 +166,18 @@ const GamePage = () => {
                     <Typography variant="h5">
                       Rating
                     </Typography>
-                    <Typography variant="h5">
-                      {game?.rating.totalRating} / 10
-                    </Typography>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'row'
+                    }}>
+                      <Rating name="half-rating" defaultValue={Math.floor(game?.rating.totalRating)/2} precision={0.5} disabled style={{ opacity: 1 }} />
+                      <Typography variant="h5" style={{
+                        marginLeft: 5,
+                        marginTop: -3
+                      }}>
+                        {game?.rating.totalRating}
+                      </Typography>
+                    </div>
                   </Card>
                   <Card variant='outlined' style={{
                     width: '100%',
