@@ -3,8 +3,10 @@ import { authRegAPI } from "./api/authRegApi";
 import { gamesAPI } from "./api/gamesApi";
 import { developerAPI } from "./api/developerApi";
 import { publisherAPI } from "./api/publisherApi";
+import userReducer from './reducers/UserSlice'
 
 const rootReducer = combineReducers({
+  userReducer,
   [authRegAPI.reducerPath]: authRegAPI.reducer,
   [gamesAPI.reducerPath]: gamesAPI.reducer,
   [developerAPI.reducerPath]: developerAPI.reducer,
