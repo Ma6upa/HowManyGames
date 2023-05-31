@@ -2,11 +2,13 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { authRegAPI } from "./api/authRegApi";
 import { gamesAPI } from "./api/gamesApi";
 import { developerAPI } from "./api/developerApi";
+import { publisherAPI } from "./api/publisherApi";
 
 const rootReducer = combineReducers({
   [authRegAPI.reducerPath]: authRegAPI.reducer,
   [gamesAPI.reducerPath]: gamesAPI.reducer,
   [developerAPI.reducerPath]: developerAPI.reducer,
+  [publisherAPI.reducerPath]: publisherAPI.reducer,
 })
 
 export const setupStore = () => {
@@ -16,6 +18,7 @@ export const setupStore = () => {
     .concat(authRegAPI.middleware)
     .concat(gamesAPI.middleware)
     .concat(developerAPI.middleware)
+    .concat(publisherAPI.middleware)
   })
 }
 
