@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import MainPage from "./pages/MainPage";
 import RegistrationPage from "./pages/RegistrationPage";
@@ -17,13 +17,28 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import SearchIcon from '@mui/icons-material/Search';
 import LoginIcon from '@mui/icons-material/Login';
 import GamePage from "./pages/GamePage";
-import { useAppSelector } from "./hooks/redux";
+import { useAppDispatch, useAppSelector } from "./hooks/redux";
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { userAPI } from "./store/api/userApi";
+import { userSlice } from "./store/reducers/UserSlice";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
   const [anchorEl, setAnchorEl] = useState(null);
+  const [fetchUser, { }] = userAPI.useFetchUserMutation();
+  const { addUser } = userSlice.actions;
+  const dispatch = useAppDispatch();
+
+  const parseJwt = (token: string) => {
+    let base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  }
 
   const handleMenu = (event: React.SyntheticEvent) => {
     setAnchorEl(event.currentTarget);
@@ -32,6 +47,17 @@ const App = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const autoLogin = async (token: string) => {
+    const userRes = await fetchUser(Number(parseJwt(token).Id))
+    dispatch(addUser(userRes.data))
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      autoLogin(localStorage.getItem('token')!)
+    }
+  }, [])
 
   return (
     <>

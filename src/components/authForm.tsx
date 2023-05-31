@@ -43,6 +43,7 @@ const AuthForm = () => {
       nickname: data.get('nickname')?.toString() || null,
     }
     const res = await login(userData)
+    localStorage.setItem('token', res.error.data)
     const userRes = await fetchUser(Number(parseJwt(res.error.data).Id))
     dispatch(addUser(userRes.data))
   }
