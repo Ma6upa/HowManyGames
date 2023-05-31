@@ -10,12 +10,28 @@ import {
   createTheme,
 } from "@mui/material"
 import { authRegAPI } from "../store/api/authRegApi";
+import { userSlice } from "../store/reducers/UserSlice";
+import { useAppDispatch } from "../hooks/redux";
+import { userAPI } from "../store/api/userApi";
 
 const AuthForm = () => {
   const theme = createTheme();
-  const [ login, {} ] = authRegAPI.useLoginMutation()
+  const [login, { }] = authRegAPI.useLoginMutation()
+  const [fetchUser, { }] = userAPI.useFetchUserMutation()
+  const { addUser } = userSlice.actions;
+  const dispatch = useAppDispatch();
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+  const parseJwt = (token: string) => {
+    let base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  }
+
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.currentTarget as HTMLFormElement;
     const data = new FormData(target);
@@ -23,7 +39,9 @@ const AuthForm = () => {
       password: data.get('password')?.toString() || null,
       nickname: data.get('nickname')?.toString() || null,
     }
-    login(userData)
+    const res = await login(userData)
+    const userRes = await fetchUser(Number(parseJwt(res.error.data).Id))
+    dispatch(addUser(userRes.data))
   }
 
   return (

@@ -14,6 +14,7 @@ import {
   Card
 } from "@mui/material"
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 
 const GamePage = () => {
   const theme = createTheme();
@@ -403,6 +404,7 @@ const GamePage = () => {
                         <Typography variant="h6" style={{ marginTop: -5 }}>
                           {item.reviewRating}
                         </Typography>
+                        <ThumbDownOffAltIcon />
                       </div>
                     </Card>
                   ))}

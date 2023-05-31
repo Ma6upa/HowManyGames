@@ -1,14 +1,16 @@
 import { IGameSingle, IReview } from "./IGame";
 
 export interface IUser {
-  id: number,
-  email: string,
-  nickname: string,
-  age: number,
-  gender: string,
-  picturePath: string,
-  registrationDate: string,
-  userRoles: IUserRole[],
+  user: {
+    id: number,
+    email: string,
+    nickname: string,
+    age: number,
+    gender: string,
+    picturePath: string,
+    registrationDate: string,
+    userRoles: IUserRole[],
+  }
   favouriteGames: IGameSingle[] | null,
   publisherStatistic: IPublisherStatistic[] | null,
   tagStatistic: ITagStatistic[],

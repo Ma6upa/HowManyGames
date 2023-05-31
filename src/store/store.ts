@@ -4,6 +4,7 @@ import { gamesAPI } from "./api/gamesApi";
 import { developerAPI } from "./api/developerApi";
 import { publisherAPI } from "./api/publisherApi";
 import userReducer from './reducers/UserSlice'
+import { userAPI } from "./api/userApi";
 
 const rootReducer = combineReducers({
   userReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   [gamesAPI.reducerPath]: gamesAPI.reducer,
   [developerAPI.reducerPath]: developerAPI.reducer,
   [publisherAPI.reducerPath]: publisherAPI.reducer,
+  [userAPI.reducerPath]: userAPI.reducer,
 })
 
 export const setupStore = () => {
@@ -21,6 +23,7 @@ export const setupStore = () => {
     .concat(gamesAPI.middleware)
     .concat(developerAPI.middleware)
     .concat(publisherAPI.middleware)
+    .concat(userAPI.middleware)
   })
 }
 
