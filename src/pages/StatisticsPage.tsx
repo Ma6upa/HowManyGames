@@ -31,14 +31,9 @@ const StatisticsPage = () => {
 
 
   useEffect(() => {
-    if (mostRatedGame) {
+    if (mostRatedGame && mostRatedDLC) {
       if (!games.includes(mostRatedGame)) {
-        setGames([...games, mostRatedGame])
-      }
-    }
-    if (mostRatedDLC) {
-      if (!games.includes(mostRatedDLC)) {
-        setGames([...games, mostRatedDLC])
+        setGames([...games, mostRatedGame, mostRatedDLC])
       }
     }
   }, [mostRatedGame, mostRatedDLC])
