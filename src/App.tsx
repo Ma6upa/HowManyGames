@@ -25,6 +25,7 @@ import { userSlice } from "./store/reducers/UserSlice";
 import UserPage from "./pages/UserPage";
 import UserSettingsPage from "./pages/UserSetting";
 import UserListGames from "./pages/UserGames";
+import StatisticsPage from "./pages/StatisticsPage";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -76,9 +77,11 @@ const App = () => {
               HowManyGames
             </Typography>
           </Link>
-          <IconButton>
-            <LeaderboardIcon style={{ color: 'white' }} />
-          </IconButton>
+          <Link to='/statistics' style={{ textDecoration: 'none', color: 'white' }}>
+            <IconButton>
+              <LeaderboardIcon style={{ color: 'white' }} />
+            </IconButton>
+          </Link>
           <TextField
             style={{
               backgroundColor: 'white',
@@ -219,6 +222,7 @@ const App = () => {
         <Route path="/user/:id" element={<UserPage />} />
         <Route path="/userSettings/:id" element={<UserSettingsPage />} />
         <Route path="/completed/:listType" element={<UserListGames />} />
+        <Route path="/statistics" element={<StatisticsPage />} />
       </Routes>
     </>
   )
