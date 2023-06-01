@@ -5,6 +5,7 @@ import { developerAPI } from "./api/developerApi";
 import { publisherAPI } from "./api/publisherApi";
 import userReducer from './reducers/UserSlice'
 import { userAPI } from "./api/userApi";
+import { GlobalStatisticAPI } from "./api/statisticsApi";
 
 const rootReducer = combineReducers({
   userReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   [developerAPI.reducerPath]: developerAPI.reducer,
   [publisherAPI.reducerPath]: publisherAPI.reducer,
   [userAPI.reducerPath]: userAPI.reducer,
+  [GlobalStatisticAPI.reducerPath]: GlobalStatisticAPI.reducer,
 })
 
 export const setupStore = () => {
@@ -24,6 +26,7 @@ export const setupStore = () => {
     .concat(developerAPI.middleware)
     .concat(publisherAPI.middleware)
     .concat(userAPI.middleware)
+    .concat(GlobalStatisticAPI.middleware)
   })
 }
 
