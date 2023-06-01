@@ -25,8 +25,8 @@ const StatisticsPage = () => {
   const [gameGenres, setGameGenres] = useState('Genres not found')
   const [gamePlatforms, setGamePlatforms] = useState('Platforms not found')
   const [gameTags, setGameTags] = useState('Tags not found')
-  const { data: mostRatedGame } = GlobalStatisticAPI.useFetchMostRatedGameQuery(0)
-  const { data: mostRatedDLC } = GlobalStatisticAPI.useFetchMostRatedDLCQuery(0)
+  const { data: mostRatedGame } = GlobalStatisticAPI.useFetchMostRatedGameQuery()
+  const { data: mostRatedDLC } = GlobalStatisticAPI.useFetchMostRatedDLCQuery()
   const [games, setGames] = useState<any[]>([])
 
 

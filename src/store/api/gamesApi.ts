@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IGame, IGameSingle, IReview } from '../../interfaces/IGame'
+import { BaseQueryMeta, } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 
 interface IFilters {
   pageNumber: number,
@@ -26,7 +27,7 @@ export const gamesAPI = createApi({
   reducerPath: 'gamesAPI',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API + '/api/Game' }),
   endpoints: (build) => ({
-    getAllGames: build.mutation<IGame[], IFilters>({
+    getAllGames: build.mutation<{apiResponse: IGame[], headers: any}, IFilters>({
       query: (filters) => ({
         url: '/games',
         method: 'POST',
@@ -50,7 +51,10 @@ export const gamesAPI = createApi({
           NSFW: filters.nsfw,
           Rating: filters.rating,
         }
-      })
+      }),
+      transformResponse(apiResponse: IGame[], meta: BaseQueryMeta<any>) {
+        return { apiResponse, headers: JSON.parse(meta.response.headers.get('X-Pagination')) }
+      }
     }),
     getGame: build.query<IGameSingle, number>({
       query: (id) => ({

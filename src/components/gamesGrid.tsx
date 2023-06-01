@@ -46,6 +46,7 @@ const GamesGrid = () => {
   const [nsfw, setNsfw] = useState(false)
   const [rating, setRating] = useState(true)
   const [games, setGames] = useState<IGame[]>([])
+  const [totalPages, setTotalPages] = useState(1)
   const theme = createTheme();
 
   const { data: filters } = FiltersAndConstsAPI.useFetchFiltersQuery(0)
@@ -72,7 +73,8 @@ const GamesGrid = () => {
       nsfw,
       rating
     })
-    setGames(data.data)
+    setTotalPages(data.data.headers.TotalPages)
+    setGames(data.data.apiResponse)
   }
 
   const handlePrev = () => {
@@ -80,7 +82,7 @@ const GamesGrid = () => {
   }
 
   const handleNext = () => {
-    if (pageNumber < 2) setPageNubmer((pageNumber) => pageNumber + 1)
+    if (pageNumber < totalPages) setPageNubmer((pageNumber) => pageNumber + 1)
   }
 
   useEffect(() => {
@@ -105,10 +107,6 @@ const GamesGrid = () => {
     nsfw,
     rating
   ])
-
-  useEffect(() => {
-    console.log(filters)
-  }, [filters])
 
   return (
     <ThemeProvider theme={theme}>
