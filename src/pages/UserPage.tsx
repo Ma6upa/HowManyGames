@@ -61,7 +61,7 @@ const UserPage = () => {
                 <Typography variant="h5">
                   Game Lists
                 </Typography>
-                <Link to="/" style={{ textDecoration: 'none', color: 'black' }}>
+                <Link to={'/completed/' + user.user.id} style={{ textDecoration: 'none', color: 'black' }}>
                   <Typography variant="h6">
                     Planed / Playing / Completed / Dropped / On hold
                   </Typography>
@@ -479,7 +479,7 @@ const UserPage = () => {
               </Typography>
               <Divider />
               {user.userReviews?.map((item, index) => (
-                <Card variant="outlined" style={{
+                <Card variant="outlined" key={item.id} style={{
                   marginTop: 15,
                   padding: 5
                 }}>

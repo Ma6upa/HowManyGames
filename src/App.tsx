@@ -24,6 +24,7 @@ import { userAPI } from "./store/api/userApi";
 import { userSlice } from "./store/reducers/UserSlice";
 import UserPage from "./pages/UserPage";
 import UserSettingsPage from "./pages/UserSetting";
+import UserListGames from "./pages/UserGames";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -217,6 +218,7 @@ const App = () => {
         <Route path="/game/:id" element={<GamePage />} />
         <Route path="/user/:id" element={<UserPage />} />
         <Route path="/userSettings/:id" element={<UserSettingsPage />} />
+        <Route path="/completed/:id" element={<UserListGames />} />
       </Routes>
     </>
   )
