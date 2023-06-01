@@ -6,6 +6,7 @@ import { publisherAPI } from "./api/publisherApi";
 import userReducer from './reducers/UserSlice'
 import { userAPI } from "./api/userApi";
 import { GlobalStatisticAPI } from "./api/statisticsApi";
+import { FiltersAndConstsAPI } from "./api/filterAndConsts";
 
 const rootReducer = combineReducers({
   userReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   [publisherAPI.reducerPath]: publisherAPI.reducer,
   [userAPI.reducerPath]: userAPI.reducer,
   [GlobalStatisticAPI.reducerPath]: GlobalStatisticAPI.reducer,
+  [FiltersAndConstsAPI.reducerPath]: FiltersAndConstsAPI.reducer,
 })
 
 export const setupStore = () => {
@@ -27,6 +29,7 @@ export const setupStore = () => {
     .concat(publisherAPI.middleware)
     .concat(userAPI.middleware)
     .concat(GlobalStatisticAPI.middleware)
+    .concat(FiltersAndConstsAPI.middleware)
   })
 }
 

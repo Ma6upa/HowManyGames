@@ -16,11 +16,15 @@ import {
   Select,
   TextField,
   Typography,
-  createTheme
+  createTheme,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@mui/material"
 import { developerAPI } from "../store/api/developerApi"
 import { publisherAPI } from "../store/api/publisherApi"
 import { Link } from "react-router-dom"
+import { FiltersAndConstsAPI } from "../store/api/filterAndConsts"
 
 const GamesGrid = () => {
   const [pageNumber, setPageNubmer] = useState(1)
@@ -44,8 +48,9 @@ const GamesGrid = () => {
   const [games, setGames] = useState<IGame[]>([])
   const theme = createTheme();
 
-  const {data: developers} = developerAPI.useFetchAllDevelopersQuery(0)
-  const {data: publishers} = publisherAPI.useFetchAllPublishersQuery(0)
+  const { data: developers } = developerAPI.useFetchAllDevelopersQuery(0)
+  const { data: publishers } = publisherAPI.useFetchAllPublishersQuery(0)
+  const { data: filters } = FiltersAndConstsAPI.useFetchFiltersQuery(0)
   const [getAllGames, { isLoading: isUpdating }] = gamesAPI.useGetAllGamesMutation()
 
   const fetchGames = async () => {
@@ -103,6 +108,10 @@ const GamesGrid = () => {
     rating
   ])
 
+  useEffect(() => {
+    console.log(filters)
+  }, [filters])
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md">
@@ -147,7 +156,7 @@ const GamesGrid = () => {
               <Grid container spacing={4}>
                 {games.map((item, index) => (
                   <Grid item xs={4} key={item.id}>
-                    <Link to={'/game/'+item.id} style={{ textDecoration: 'none', color: 'black' }}>
+                    <Link to={'/game/' + item.id} style={{ textDecoration: 'none', color: 'black' }}>
                       <Card variant="outlined">
                         <img src={import.meta.env.VITE_API + `/${item.picturePath}`} style={{
                           width: 270,
@@ -179,467 +188,318 @@ const GamesGrid = () => {
         </Box>
       </Container>
       <Box sx={{
-        width: '12%',
+        width: '15%',
         right: 20,
-        top: 100,
+        top: 115,
         paddingBottom: 10,
         diplay: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         position: 'absolute',
       }}>
-        <InputLabel id="demo-simple-select-label">Sort By</InputLabel>
-        <Select
-          required
-          fullWidth
-          name="sortBy"
-          id="sortBy"
-          defaultValue="true"
-          onChange={(event) => {
-            setRating(JSON.parse(event.target.value))
-          }}
-        >
-          <MenuItem value="true">
-            Rating
-          </MenuItem>
-          <MenuItem value="false">
-            Alphabet
-          </MenuItem>
-        </Select>
-        <InputLabel id="demo-simple-select-label">Status</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox defaultChecked onChange={(event) => {
-              if (event.target.checked) {
-                if (!status.includes('released')) {
-                  setStatus([...status, 'released'])
-                }
-              } else {
-                if (status.includes('released')) {
-                  setStatus(status.filter(item => item !== 'released'))
-                }
-              }
-            }} />} label="Released" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!status.includes('announced')) {
-                  setStatus([...status, 'announced'])
-                }
-              } else {
-                if (status.includes('announced')) {
-                  setStatus(status.filter(item => item !== 'announced'))
-                }
-              }
-            }} />} label="Announced" />
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Type</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox defaultChecked onChange={(event) => {
-              if (event.target.checked) {
-                if (!type.includes('game')) {
-                  setType([...type, 'game'])
-                }
-              } else {
-                if (type.includes('game')) {
-                  setType(type.filter(item => item !== 'game'))
-                }
-              }
-            }} />} label="Game" />
-            <FormControlLabel control={<Checkbox defaultChecked onChange={(event) => {
-              if (event.target.checked) {
-                if (!type.includes('dlc')) {
-                  setType([...type, 'dlc'])
-                }
-              } else {
-                if (type.includes('dlc')) {
-                  setType(type.filter(item => item !== 'dlc'))
-                }
-              }
-            }} />} label="DLC" />
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Rating</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <TextField
-              type='number'
-              placeholder="min rating"
+        <Accordion>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Sort By</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Select
+              required
+              fullWidth
+              name="sortBy"
+              id="sortBy"
+              defaultValue="true"
               onChange={(event) => {
-                setMinRating(Number(event.target.value))
+                setRating(JSON.parse(event.target.value))
               }}
-            />
-            <TextField
-              type='number'
-              placeholder="max rating"
-              onChange={(event) => {
-                setMaxRating(Number(event.target.value))
-              }}
-            />
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Release year</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <TextField
-              type='number'
-              placeholder="min release year"
-              onChange={(event) => {
-                setMinYearOfRelease(Number(event.target.value))
-              }}
-            />
-            <TextField
-              type='number'
-              placeholder="max release year"
-              onChange={(event) => {
-                setMaxYearOfRelease(Number(event.target.value))
-              }}
-            />
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Playtime</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <TextField
-              type='number'
-              placeholder="min play time"
-              onChange={(event) => {
-                setMinPlayTime(Number(event.target.value))
-              }}
-            />
-            <TextField
-              type='number'
-              placeholder="max play time"
-              onChange={(event) => {
-                setMaxPlayTime(Number(event.target.value))
-              }}
-            />
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Genre</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!genre.includes('action')) {
-                  setGenre([...genre, 'action'])
-                }
-              } else {
-                if (genre.includes('action')) {
-                  setGenre(genre.filter(item => item !== 'action'))
-                }
-              }
-            }} />} label="Action" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!genre.includes('strategy')) {
-                  setGenre([...genre, 'strategy'])
-                }
-              } else {
-                if (genre.includes('strategy')) {
-                  setGenre(genre.filter(item => item !== 'strategy'))
-                }
-              }
-            }} />} label="Strategy" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!genre.includes('rpg')) {
-                  setGenre([...genre, 'rpg'])
-                }
-              } else {
-                if (genre.includes('rpg')) {
-                  setGenre(genre.filter(item => item !== 'rpg'))
-                }
-              }
-            }} />} label="RPG" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!genre.includes('shooter')) {
-                  setGenre([...genre, 'shooter'])
-                }
-              } else {
-                if (genre.includes('shooter')) {
-                  setGenre(genre.filter(item => item !== 'shooter'))
-                }
-              }
-            }} />} label="Shooter" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!genre.includes('adventure')) {
-                  setGenre([...genre, 'adventure'])
-                }
-              } else {
-                if (genre.includes('adventure')) {
-                  setGenre(genre.filter(item => item !== 'adventure'))
-                }
-              }
-            }} />} label="Adventure" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!genre.includes('puzzle')) {
-                  setGenre([...genre, 'puzzle'])
-                }
-              } else {
-                if (genre.includes('puzzle')) {
-                  setGenre(genre.filter(item => item !== 'puzzle'))
-                }
-              }
-            }} />} label="Puzzle" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!genre.includes('racing')) {
-                  setGenre([...genre, 'racing'])
-                }
-              } else {
-                if (genre.includes('racing')) {
-                  setGenre(genre.filter(item => item !== 'racing'))
-                }
-              }
-            }} />} label="Racing" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!genre.includes('sports')) {
-                  setGenre([...genre, 'sports'])
-                }
-              } else {
-                if (genre.includes('sports')) {
-                  setGenre(genre.filter(item => item !== 'sports'))
-                }
-              }
-            }} />} label="Sports" />
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Tags</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!tag.includes('action')) {
-                  setTag([...tag, 'action'])
-                }
-              } else {
-                if (tag.includes('action')) {
-                  setTag(tag.filter(item => item !== 'action'))
-                }
-              }
-            }} />} label="Action" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!tag.includes('strategy')) {
-                  setTag([...tag, 'strategy'])
-                }
-              } else {
-                if (tag.includes('strategy')) {
-                  setTag(tag.filter(item => item !== 'strategy'))
-                }
-              }
-            }} />} label="Strategy" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!tag.includes('rpg')) {
-                  setTag([...tag, 'rpg'])
-                }
-              } else {
-                if (tag.includes('rpg')) {
-                  setTag(tag.filter(item => item !== 'rpg'))
-                }
-              }
-            }} />} label="RPG" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!tag.includes('shooter')) {
-                  setTag([...tag, 'shooter'])
-                }
-              } else {
-                if (tag.includes('shooter')) {
-                  setTag(tag.filter(item => item !== 'shooter'))
-                }
-              }
-            }} />} label="Shooter" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!tag.includes('adventure')) {
-                  setTag([...tag, 'adventure'])
-                }
-              } else {
-                if (tag.includes('adventure')) {
-                  setTag(tag.filter(item => item !== 'adventure'))
-                }
-              }
-            }} />} label="Adventure" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!tag.includes('puzzle')) {
-                  setTag([...tag, 'puzzle'])
-                }
-              } else {
-                if (tag.includes('puzzle')) {
-                  setTag(tag.filter(item => item !== 'puzzle'))
-                }
-              }
-            }} />} label="Puzzle" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!tag.includes('racing')) {
-                  setTag([...tag, 'racing'])
-                }
-              } else {
-                if (tag.includes('racing')) {
-                  setTag(tag.filter(item => item !== 'racing'))
-                }
-              }
-            }} />} label="Racing" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!tag.includes('sports')) {
-                  setTag([...tag, 'sports'])
-                }
-              } else {
-                if (tag.includes('sports')) {
-                  setTag(tag.filter(item => item !== 'sports'))
-                }
-              }
-            }} />} label="Sports" />
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Platforms</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!platform.includes('pc')) {
-                  setPlatform([...platform, 'pc'])
-                }
-              } else {
-                if (platform.includes('pc')) {
-                  setPlatform(platform.filter(item => item !== 'pc'))
-                }
-              }
-            }} />} label="PC" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!platform.includes('ps5')) {
-                  setPlatform([...platform, 'ps5'])
-                }
-              } else {
-                if (platform.includes('ps5')) {
-                  setPlatform(platform.filter(item => item !== 'ps5'))
-                }
-              }
-            }} />} label="PS5" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!platform.includes('ps4')) {
-                  setPlatform([...platform, 'ps4'])
-                }
-              } else {
-                if (platform.includes('ps4')) {
-                  setPlatform(platform.filter(item => item !== 'ps4'))
-                }
-              }
-            }} />} label="PS4" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!platform.includes('psp')) {
-                  setPlatform([...platform, 'psp'])
-                }
-              } else {
-                if (platform.includes('psp')) {
-                  setPlatform(platform.filter(item => item !== 'psp'))
-                }
-              }
-            }} />} label="PSP" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!platform.includes('xbox one')) {
-                  setPlatform([...platform, 'xbox one'])
-                }
-              } else {
-                if (platform.includes('xbox one')) {
-                  setPlatform(platform.filter(item => item !== 'xbox one'))
-                }
-              }
-            }} />} label="XBox One" />
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              if (event.target.checked) {
-                if (!platform.includes('xbox series x')) {
-                  setPlatform([...platform, 'xbox series x'])
-                }
-              } else {
-                if (platform.includes('xbox series x')) {
-                  setPlatform(platform.filter(item => item !== 'xbox series x'))
-                }
-              }
-            }} />} label="XBox Series X" />
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Developers</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            {developers?.map((item) => (
-               <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
-                if (event.target.checked) {
-                  if (!developer.includes(item.name)) {
-                    setDeveloper([...developer, item.name])
-                  }
-                } else {
-                  if (developer.includes(item.name)) {
-                    setDeveloper(developer.filter(el => el !== item.name))
-                  }
-                }
-              }} />} label={item.name} />
-            ))}
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">Publishers</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            {publishers?.map((item) => (
-               <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
-                if (event.target.checked) {
-                  if (!publisher.includes(item.name)) {
-                    setPublisher([...publisher, item.name])
-                  }
-                } else {
-                  if (publisher.includes(item.name)) {
-                    setPublisher(publisher.filter(el => el !== item.name))
-                  }
-                }
-              }} />} label={item.name} />
-            ))}
-          </FormGroup>
-        </Card>
-        <InputLabel id="demo-simple-select-label">NSFW</InputLabel>
-        <Card variant="outlined" style={{
-          padding: 10
-        }}>
-          <FormGroup>
-            <FormControlLabel control={<Checkbox onChange={(event) => {
-              setNsfw(event.target.checked)
-            }} />} label="NSFW" />
-          </FormGroup>
-        </Card>
+            >
+              <MenuItem value="true">
+                {filters?.sortBy[0]}
+              </MenuItem>
+              <MenuItem value="false">
+                {filters?.sortBy[1]}
+              </MenuItem>
+            </Select>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Status</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                {filters?.status.map((item, index) => (
+                  <FormControlLabel key={item} control={<Checkbox defaultChecked={index === 0} onChange={(event) => {
+                    if (event.target.checked) {
+                      if (!status.includes(item)) {
+                        setStatus([...status, item])
+                      }
+                    } else {
+                      if (status.includes(item)) {
+                        setStatus(status.filter(el => el !== item))
+                      }
+                    }
+                  }} />} label={item} />
+                ))}
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Type</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                {filters?.type.map((item, index) => (
+                  <FormControlLabel key={item} control={<Checkbox defaultChecked onChange={(event) => {
+                    if (event.target.checked) {
+                      if (!type.includes(item)) {
+                        setType([...type, item])
+                      }
+                    } else {
+                      if (type.includes(item)) {
+                        setType(type.filter(el => el !== item))
+                      }
+                    }
+                  }} />} label={item} />
+                ))}
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Rating</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                <TextField
+                  type='number'
+                  placeholder="min rating"
+                  onChange={(event) => {
+                    setMinRating(Number(event.target.value))
+                  }}
+                />
+                <TextField
+                  type='number'
+                  placeholder="max rating"
+                  onChange={(event) => {
+                    setMaxRating(Number(event.target.value))
+                  }}
+                />
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Release year</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                <TextField
+                  type='number'
+                  placeholder="min release year"
+                  onChange={(event) => {
+                    setMinYearOfRelease(Number(event.target.value))
+                  }}
+                />
+                <TextField
+                  type='number'
+                  placeholder="max release year"
+                  onChange={(event) => {
+                    setMaxYearOfRelease(Number(event.target.value))
+                  }}
+                />
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Playtime</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                <TextField
+                  type='number'
+                  placeholder="min play time"
+                  onChange={(event) => {
+                    setMinPlayTime(Number(event.target.value))
+                  }}
+                />
+                <TextField
+                  type='number'
+                  placeholder="max play time"
+                  onChange={(event) => {
+                    setMaxPlayTime(Number(event.target.value))
+                  }}
+                />
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Genre</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                {filters?.genres.map((item, index) => (
+                  <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
+                    if (event.target.checked) {
+                      if (!genre.includes(item.name)) {
+                        setGenre([...genre, item.name])
+                      }
+                    } else {
+                      if (genre.includes(item.name)) {
+                        setGenre(genre.filter(el => el !== item.name))
+                      }
+                    }
+                  }} />} label={item.name} />
+                ))}
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Tags</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                {filters?.tags.map((item, index) => (
+                  <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
+                    if (event.target.checked) {
+                      if (!tag.includes(item.name)) {
+                        setTag([...tag, item.name])
+                      }
+                    } else {
+                      if (tag.includes(item.name)) {
+                        setTag(tag.filter(el => el !== item.name))
+                      }
+                    }
+                  }} />} label={item.name} />
+                ))}
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Platforms</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                {filters?.platforms.map((item, index) => (
+                  <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
+                    if (event.target.checked) {
+                      if (!platform.includes(item.name)) {
+                        setPlatform([...platform, item.name])
+                      }
+                    } else {
+                      if (platform.includes(item.name)) {
+                        setPlatform(platform.filter(el => el !== item.name))
+                      }
+                    }
+                  }} />} label={item.name} />
+                ))}
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Developers</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                {filters?.developers.map((item) => (
+                  <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
+                    if (event.target.checked) {
+                      if (!developer.includes(item.name)) {
+                        setDeveloper([...developer, item.name])
+                      }
+                    } else {
+                      if (developer.includes(item.name)) {
+                        setDeveloper(developer.filter(el => el !== item.name))
+                      }
+                    }
+                  }} />} label={item.name} />
+                ))}
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Publishers</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                {filters?.publisbhers?.map((item) => (
+                  <FormControlLabel key={item.id} control={<Checkbox onChange={(event) => {
+                    if (event.target.checked) {
+                      if (!publisher.includes(item.name)) {
+                        setPublisher([...publisher, item.name])
+                      }
+                    } else {
+                      if (publisher.includes(item.name)) {
+                        setPublisher(publisher.filter(el => el !== item.name))
+                      }
+                    }
+                  }} />} label={item.name} />
+                ))}
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">NSFW</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox onChange={(event) => {
+                  setNsfw(event.target.checked)
+                }} />} label={filters?.nsfw} />
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
       </Box>
     </ThemeProvider>
   )
