@@ -76,6 +76,12 @@ const UserSettingsPage = () => {
                 type="password"
                 id="password"
               />
+              <Button
+                variant="contained"
+                color="error"
+              >
+                DELETE USER
+              </Button>
             </Box>
             <Box sx={{
               width: '40%',
