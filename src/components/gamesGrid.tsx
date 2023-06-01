@@ -139,7 +139,7 @@ const GamesGrid = () => {
         >
           {isUpdating && (
             <Typography component="h1" variant="h5">
-              Происходит загрузка...
+              Loading...
             </Typography>
           )}
           {!isUpdating && (

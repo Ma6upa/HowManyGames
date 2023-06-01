@@ -61,7 +61,7 @@ const GamePage = () => {
             }}
           >
             <Typography component="h1" variant="h4">
-              Идет загрузка...
+              Loading...
             </Typography>
           </Box>
         )}
@@ -396,7 +396,7 @@ const GamePage = () => {
             <Box sx={{
               width: '100%',
             }}>
-              {isReviewsLoading && (<Typography variant="h3">Идет загрузка...</Typography>)}
+              {isReviewsLoading && (<Typography variant="h3">Loading...</Typography>)}
               {!isReviewsLoading && (
                 <Card variant="outlined" style={{
                   width: '100%',

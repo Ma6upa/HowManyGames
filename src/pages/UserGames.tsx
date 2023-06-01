@@ -39,7 +39,7 @@ const UserListGames = () => {
           {!user && (
             <Box>
               <Typography component="h1" variant="h4">
-                Происходит загрузка...
+                Loading...
               </Typography>
             </Box>
           )}
