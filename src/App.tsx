@@ -218,7 +218,7 @@ const App = () => {
         <Route path="/game/:id" element={<GamePage />} />
         <Route path="/user/:id" element={<UserPage />} />
         <Route path="/userSettings/:id" element={<UserSettingsPage />} />
-        <Route path="/completed/:id" element={<UserListGames />} />
+        <Route path="/completed/:listType" element={<UserListGames />} />
       </Routes>
     </>
   )

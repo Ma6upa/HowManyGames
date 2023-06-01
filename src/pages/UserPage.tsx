@@ -61,11 +61,17 @@ const UserPage = () => {
                 <Typography variant="h5">
                   Game Lists
                 </Typography>
-                <Link to={'/completed/' + user.user.id} style={{ textDecoration: 'none', color: 'black' }}>
                   <Typography variant="h6">
-                    Planed / Playing / Completed / Dropped / On hold
+                  <Link to={'/completed/Planned'} style={{ textDecoration: 'none', color: 'black' }}> Planed </Link>
+                    / 
+                  <Link to={'/completed/Playing'} style={{ textDecoration: 'none', color: 'black' }}> Playing </Link>
+                    / 
+                  <Link to={'/completed/Completed'} style={{ textDecoration: 'none', color: 'black' }}> Completed </Link>
+                    / 
+                  <Link to={'/completed/Dropped'} style={{ textDecoration: 'none', color: 'black' }}> Dropped </Link>
+                    / 
+                  <Link to={'/completed/Onhold'} style={{ textDecoration: 'none', color: 'black' }}> On hold </Link>
                   </Typography>
-                </Link>
               </Box>
             </Box>
             <Card variant="outlined" style={{
