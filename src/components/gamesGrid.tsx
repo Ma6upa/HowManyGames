@@ -48,8 +48,6 @@ const GamesGrid = () => {
   const [games, setGames] = useState<IGame[]>([])
   const theme = createTheme();
 
-  const { data: developers } = developerAPI.useFetchAllDevelopersQuery(0)
-  const { data: publishers } = publisherAPI.useFetchAllPublishersQuery(0)
   const { data: filters } = FiltersAndConstsAPI.useFetchFiltersQuery(0)
   const [getAllGames, { isLoading: isUpdating }] = gamesAPI.useGetAllGamesMutation()
 
@@ -477,6 +475,28 @@ const GamesGrid = () => {
                       if (publisher.includes(item.name)) {
                         setPublisher(publisher.filter(el => el !== item.name))
                       }
+                    }
+                  }} />} label={item.name} />
+                ))}
+              </FormGroup>
+            </Card>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion style={{ marginTop: 10 }}>
+          <AccordionSummary>
+            <InputLabel id="demo-simple-select-label">Age Rating</InputLabel>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Card variant="outlined" style={{
+              padding: 10
+            }}>
+              <FormGroup>
+                {filters?.ageRatings?.map((item) => (
+                  <FormControlLabel key={item.id} control={<Checkbox checked={ageRating === item.name} onChange={(event) => {
+                    if (event.target.checked) {
+                      setAgeRating(item.name)
+                    } else {
+                      setAgeRating('')
                     }
                   }} />} label={item.name} />
                 ))}
