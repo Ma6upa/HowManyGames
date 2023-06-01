@@ -342,7 +342,6 @@ const UserListGames = () => {
                   id="score"
                   name="score"
                   defaultValue="10"
-                  autoFocus
                 />
                 <InputLabel id="demo-simple-select-label" style={{ marginBottom: -10 }}>List</InputLabel>
                 <TextField
@@ -351,8 +350,7 @@ const UserListGames = () => {
                   fullWidth
                   id="list"
                   name="list"
-                  defaultValue="Completed"
-                  autoFocus
+                  defaultValue={listType}
                 />
                 <InputLabel id="demo-simple-select-label" style={{ marginBottom: -10 }}>Comment</InputLabel>
                 <TextField
@@ -364,12 +362,14 @@ const UserListGames = () => {
                   id="comment"
                   name="comment"
                   defaultValue="Best!!!"
-                  autoFocus
                 />
                 <Button
                   type="submit"
                   variant="contained"
                   sx={{ mt: 3, mb: 2, float: 'right' }}
+                  onClick={() => {
+                    setOpenModal(false)
+                  }}
                 >
                   Save
                 </Button>
