@@ -12,7 +12,9 @@ import {
   InputLabel,
   Card,
   Modal,
-  Divider
+  Divider,
+  FormControlLabel,
+  Checkbox
 } from "@mui/material"
 import { useAppSelector } from "../hooks/redux";
 
@@ -363,6 +365,7 @@ const UserListGames = () => {
                   name="comment"
                   defaultValue="Best!!!"
                 />
+                <FormControlLabel control={<Checkbox defaultChecked />} label="Favourite" style={{ float: 'left', marginTop: -2}} />
                 <Button
                   type="submit"
                   variant="contained"
@@ -385,7 +388,7 @@ const UserListGames = () => {
                 <Button
                   variant="contained"
                   color="error"
-                  sx={{ mt: 3, mb: 2, float: 'left', mr: 2 }}
+                  sx={{ mt: 3, mb: 2, float: 'right', mr: 2 }}
                   onClick={() => {
                     setOpenModal(false)
                   }}
