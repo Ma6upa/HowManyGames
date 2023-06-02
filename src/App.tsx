@@ -26,6 +26,7 @@ import UserListGames from "./pages/UserGames";
 import StatisticsPage from "./pages/StatisticsPage";
 import SearchAutocomplete from "./components/searchAutocomplete";
 import CountrySelect from "./components/test";
+import DeveloperPage from "./pages/DeveloperPage";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -208,6 +209,7 @@ const App = () => {
         <Route path="/user/:id" element={<UserPage />} />
         <Route path="/userSettings/:id" element={<UserSettingsPage />} />
         <Route path="/completed/:listType" element={<UserListGames />} />
+        <Route path="/developer/:id" element={<DeveloperPage />} />
         <Route path="/statistics" element={<StatisticsPage />} />
       </Routes>
     </>
