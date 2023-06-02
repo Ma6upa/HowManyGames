@@ -35,6 +35,7 @@ const SearchAutocomplete: FC = () => {
   }, [query])
 
   useEffect(() => {
+    if (autoComplete) {
     setAutoCompleteOptions(
       [
         { label: autoComplete?.games.length ? 'games' : '1', data: autoComplete?.games },
@@ -43,11 +44,17 @@ const SearchAutocomplete: FC = () => {
         { label: autoComplete?.users.length ? 'users' : '4', data: autoComplete?.users }
       ]
     )
+    } else {
+      setAutoCompleteOptions(
+        [
+          { label: 'no options', data: autoComplete?.games },
+        ]
+      )
+    }
   }, [autoComplete])
 
   return (
     <Autocomplete
-      id="country-select-demo"
       sx={{
         backgroundColor: 'white',
         width: '80%'
@@ -74,6 +81,7 @@ const SearchAutocomplete: FC = () => {
           onChange={(event) => handleChange(event.target.value)}
         />
       )}
+      onClose={() => setAutoComplete(null)}
     />
   );
 }

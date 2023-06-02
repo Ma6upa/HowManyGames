@@ -15,8 +15,12 @@ interface SearchFieldsProps {
 const SearchFields: FC<SearchFieldsProps> = ({
   data
 }) => {
+  console.log(data)
   return (
     <>
+      {data.label === 'no options' && (
+        <Typography variant="h6" style={{ marginLeft: 5 }}>Nothing was found</Typography>
+      )}
       {data.label === 'games' && (
         <div>
           <Typography variant="h5" style={{ marginLeft: 5 }}>Games</Typography>
@@ -27,7 +31,7 @@ const SearchFields: FC<SearchFieldsProps> = ({
       )}
       {data.label === 'developers' && (
         <div>
-          <Typography variant="h5">Developers</Typography>
+          <Typography variant="h5" style={{ marginLeft: 5 }}>Developers</Typography>
           {data.data.map((item, index) => (
             <SearchField data={item} label={data.label} key={item.id} />
           ))}
@@ -35,7 +39,7 @@ const SearchFields: FC<SearchFieldsProps> = ({
       )}
       {data.label === 'publishers' && (
         <div>
-          <Typography variant="h5">Publishers</Typography>
+          <Typography variant="h5" style={{ marginLeft: 5 }}>Publishers</Typography>
           {data.data.map((item, index) => (
             <SearchField data={item} label={data.label} key={item.id} />
           ))}
@@ -43,7 +47,7 @@ const SearchFields: FC<SearchFieldsProps> = ({
       )}
       {data.label === 'users' && (
         <div>
-          <Typography variant="h5">Users</Typography>
+          <Typography variant="h5" style={{ marginLeft: 5 }}>Users</Typography>
           {data.data.map((item, index) => (
             <SearchField data={item} label={data.label} key={item.id} />
           ))}
