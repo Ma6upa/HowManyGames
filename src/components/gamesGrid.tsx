@@ -21,10 +21,10 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material"
-import { developerAPI } from "../store/api/developerApi"
-import { publisherAPI } from "../store/api/publisherApi"
 import { Link } from "react-router-dom"
 import { FiltersAndConstsAPI } from "../store/api/filterAndConsts"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const GamesGrid = () => {
   const [pageNumber, setPageNubmer] = useState(1)
@@ -119,18 +119,30 @@ const GamesGrid = () => {
           width: 100,
           marginTop: 8
         }}>
-          <div onClick={() => handlePrev()}>
-            <Typography component="h3" variant="h6" style={{ cursor: 'pointer' }}>
+          <div onClick={() => handlePrev()} style={{
+            display: 'flex',
+            flexDirection: 'row',
+            cursor: pageNumber > 1 ? 'pointer' : 'default',
+            opacity: pageNumber > 1 ? 1 : 0.5
+          }}>
+            <ArrowBackIcon style={{ marginTop: 5 }} />
+            <Typography component="h3" variant="h6">
               prev
             </Typography>
           </div>
-          <Typography component="h3" variant="h6">
+          <Typography component="h3" variant="h6" style={{ marginRight: 5, marginLeft: 5 }}>
             |
           </Typography>
-          <div onClick={() => handleNext()}>
-            <Typography component="h3" variant="h6" style={{ cursor: 'pointer' }}>
+          <div onClick={() => handleNext()} style={{
+            display: 'flex',
+            flexDirection: 'row',
+            cursor: pageNumber < totalPages ? 'pointer' : 'default',
+            opacity: pageNumber < totalPages ? 1 : 0.5
+          }}>
+            <Typography component="h3" variant="h6">
               next
             </Typography>
+            <ArrowForwardIcon style={{ marginTop: 5 }} />
           </div>
         </div>
         <Box
