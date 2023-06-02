@@ -6,15 +6,13 @@ import AuthPage from "./pages/AuthPage";
 import {
   AppBar,
   IconButton,
-  TextField,
   Toolbar,
   Typography,
-  InputAdornment,
   Menu,
   MenuItem,
+  Autocomplete,
 } from "@mui/material";
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
-import SearchIcon from '@mui/icons-material/Search';
 import LoginIcon from '@mui/icons-material/Login';
 import GamePage from "./pages/GamePage";
 import { useAppDispatch, useAppSelector } from "./hooks/redux";
@@ -26,6 +24,8 @@ import UserPage from "./pages/UserPage";
 import UserSettingsPage from "./pages/UserSetting";
 import UserListGames from "./pages/UserGames";
 import StatisticsPage from "./pages/StatisticsPage";
+import SearchAutocomplete from "./components/searchAutocomplete";
+import CountrySelect from "./components/test";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -82,21 +82,7 @@ const App = () => {
               <LeaderboardIcon style={{ color: 'white' }} />
             </IconButton>
           </Link>
-          <TextField
-            style={{
-              backgroundColor: 'white',
-              width: '80%'
-            }}
-            variant="standard"
-            placeholder="Search..."
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start" style={{ paddingLeft: 5 }}>
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <SearchAutocomplete />
           {!user && (
             <Link to='/login' style={{ textDecoration: 'none', color: 'white' }}>
               <div style={{

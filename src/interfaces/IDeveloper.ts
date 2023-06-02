@@ -2,6 +2,6 @@ export interface IDeveloper {
   id: number,
   name: string,
   description: string,
-  pictirePath: string,
+  picturePath: string,
   miniPicturePath: string
 }
