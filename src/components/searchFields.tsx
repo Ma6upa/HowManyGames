@@ -21,7 +21,7 @@ const SearchFields: FC<SearchFieldsProps> = ({
         <div>
           <Typography variant="h5" style={{ marginLeft: 5 }}>Games</Typography>
           {data.data.map((item, index) => (
-            <SearchField data={item} key={item.id} />
+            <SearchField data={item} label={data.label} key={item.id} />
           ))}
         </div>
       )}
@@ -29,7 +29,7 @@ const SearchFields: FC<SearchFieldsProps> = ({
         <div>
           <Typography variant="h5">Developers</Typography>
           {data.data.map((item, index) => (
-            <SearchField data={item} key={item.id} />
+            <SearchField data={item} label={data.label} key={item.id} />
           ))}
         </div>
       )}
@@ -37,7 +37,7 @@ const SearchFields: FC<SearchFieldsProps> = ({
         <div>
           <Typography variant="h5">Publishers</Typography>
           {data.data.map((item, index) => (
-            <SearchField data={item} key={item.id} />
+            <SearchField data={item} label={data.label} key={item.id} />
           ))}
         </div>
       )}
@@ -45,7 +45,7 @@ const SearchFields: FC<SearchFieldsProps> = ({
         <div>
           <Typography variant="h5">Users</Typography>
           {data.data.map((item, index) => (
-            <SearchField data={item} key={item.id} />
+            <SearchField data={item} label={data.label} key={item.id} />
           ))}
         </div>
       )}
