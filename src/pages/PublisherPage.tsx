@@ -22,9 +22,9 @@ import {
 } from "@mui/material"
 import { Link, useParams } from "react-router-dom"
 import { FiltersAndConstsAPI } from "../store/api/filterAndConsts"
-import { developerAPI } from "../store/api/developerApi"
+import { publisherAPI } from "../store/api/publisherApi"
 
-const DeveloperPage = () => {
+const PublisherPage = () => {
   const [pageNumber, setPageNubmer] = useState(1)
   const [pageSize, setPageSize] = useState(10000)
   const [minYearOfRelease, setMinYearOfRelease] = useState(1800)
@@ -48,11 +48,11 @@ const DeveloperPage = () => {
   const { id } = useParams();
 
   const { data: filters } = FiltersAndConstsAPI.useFetchFiltersQuery(0)
-  const { data: developerData } = developerAPI.useFetchDeveloperQuery(Number(id))
-  const [getDeveloperGames, { isLoading: isUpdating }] = developerAPI.useFetchDeveloperGamesMutation()
+  const { data: publisherData } = publisherAPI.useFetchPublisherQuery(Number(id))
+  const [getPublisherGames, { isLoading: isUpdating }] = publisherAPI.useFetchPublisherGamesMutation()
 
   const fetchGames = async () => {
-    const data = await getDeveloperGames({
+    const data = await getPublisherGames({
       id: Number(id),
       pageNumber,
       pageSize,
@@ -119,7 +119,7 @@ const DeveloperPage = () => {
           )}
           {!isUpdating && (
             <Box>
-              {developerData && (
+              {publisherData && (
                 <Box sx={{
                   width: '100%',
                   height: 290,
@@ -127,7 +127,7 @@ const DeveloperPage = () => {
                   flexDirection: 'row'
                 }}>
                   <Box>
-                    <img src={import.meta.env.VITE_API + `/${developerData.picturePath}`} style={{
+                    <img src={import.meta.env.VITE_API + `/${publisherData.picturePath}`} style={{
                       width: 260,
                       height: 260,
                     }} alt="No picture" />
@@ -136,10 +136,10 @@ const DeveloperPage = () => {
                     marginLeft: 10
                   }}>
                     <Typography component="h3" variant="h4">
-                      {developerData.name}
+                      {publisherData.name}
                     </Typography>
                     <Typography component="h3" variant="h5" style={{ marginTop: 10 }}>
-                      {developerData.description}
+                      {publisherData.description}
                     </Typography>
                   </Box>
                 </Box>
@@ -466,4 +466,4 @@ const DeveloperPage = () => {
   )
 }
 
-export default DeveloperPage;
+export default PublisherPage;

@@ -10,7 +10,6 @@ import {
   Typography,
   Menu,
   MenuItem,
-  Autocomplete,
 } from "@mui/material";
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import LoginIcon from '@mui/icons-material/Login';
@@ -25,8 +24,8 @@ import UserSettingsPage from "./pages/UserSetting";
 import UserListGames from "./pages/UserGames";
 import StatisticsPage from "./pages/StatisticsPage";
 import SearchAutocomplete from "./components/searchAutocomplete";
-import CountrySelect from "./components/test";
 import DeveloperPage from "./pages/DeveloperPage";
+import PublisherPage from "./pages/PublisherPage";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -210,6 +209,7 @@ const App = () => {
         <Route path="/userSettings/:id" element={<UserSettingsPage />} />
         <Route path="/completed/:listType" element={<UserListGames />} />
         <Route path="/developer/:id" element={<DeveloperPage />} />
+        <Route path="/publisher/:id" element={<PublisherPage />} />
         <Route path="/statistics" element={<StatisticsPage />} />
       </Routes>
     </>
