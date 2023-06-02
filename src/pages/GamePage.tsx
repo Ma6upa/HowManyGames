@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { gamesAPI } from "../store/api/gamesApi";
 import {
   Box,
@@ -293,23 +293,24 @@ const GamePage = () => {
                   padding: '10px 10px 0px 10px'
                 }}>
                   {game?.dlcs.map((item, index) => (
-                    <div
-                      style={{
-                        marginLeft: 10,
-                        width: 150,
-                        display: 'flex',
-                        flexDirection: 'column'
-                      }}
-                      key={item.dlcGame.id}
-                    >
-                      <img src={import.meta.env.VITE_API + `/${item.dlcGame.picturePath}`} style={{
-                        width: 150,
-                        height: 200
-                      }} alt="No picture" />
-                      <Typography variant="h6">
-                        {item.dlcGame.name}
-                      </Typography>
-                    </div>
+                    <Link to={'/game/' + item.dlcGame.id} key={item.dlcGame.id} style={{ textDecoration: 'none', color: 'black' }}>
+                      <div
+                        style={{
+                          marginLeft: 10,
+                          width: 150,
+                          display: 'flex',
+                          flexDirection: 'column'
+                        }}
+                      >
+                        <img src={import.meta.env.VITE_API + `/${item.dlcGame.picturePath}`} style={{
+                          width: 150,
+                          height: 200
+                        }} alt="No picture" />
+                        <Typography variant="h6">
+                          {item.dlcGame.name}
+                        </Typography>
+                      </div>
+                    </Link>
                   ))}
                 </div>
               </Card>
