@@ -225,11 +225,13 @@ const GamePage = () => {
                         display: 'flex',
                         flexDirection: 'row'
                       }}>
-                        <div>
-                          <img src={import.meta.env.VITE_API + `/${item.miniPicturePath}`} style={{
-                            width: '100%'
-                          }} alt="No picture" />
-                        </div>
+                        <Link to={'/developer/' + item.id}>
+                          <div>
+                            <img src={import.meta.env.VITE_API + `/${item.miniPicturePath}`} style={{
+                              width: '100%'
+                            }} alt="No picture" />
+                          </div>
+                        </Link>
                       </div>
                     ))}
                   </Card>
@@ -246,11 +248,13 @@ const GamePage = () => {
                         display: 'flex',
                         flexDirection: 'row'
                       }}>
-                        <div>
-                          <img src={import.meta.env.VITE_API + `/${item.miniPicturePath}`} style={{
-                            width: '100%',
-                          }} alt="No picture" />
-                        </div>
+                        <Link to={'/publisher/' + item.id}>
+                          <div>
+                            <img src={import.meta.env.VITE_API + `/${item.miniPicturePath}`} style={{
+                              width: '100%',
+                            }} alt="No picture" />
+                          </div>
+                        </Link>
                       </div>
                     ))}
                   </Card>

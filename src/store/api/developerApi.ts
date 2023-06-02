@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IDeveloper } from "../../interfaces/IDeveloper";
 import { IGame } from "../../interfaces/IGame";
-import { BaseQueryMeta } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 
 interface IFilters {
   id: number,
