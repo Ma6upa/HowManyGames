@@ -161,7 +161,7 @@ const App = () => {
                   </Link>
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                  <Link to={'/userSettings/' + user.user.id} style={{ textDecoration: 'none', color: 'black' }}>
+                  <Link to={'/settings'} style={{ textDecoration: 'none', color: 'black' }}>
                     <div style={{
                       display: 'flex',
                       flexDirection: 'row',
@@ -206,7 +206,7 @@ const App = () => {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/game/:id" element={<GamePage />} />
         <Route path="/user/:id" element={<UserPage />} />
-        <Route path="/userSettings/:id" element={<UserSettingsPage />} />
+        <Route path="/settings" element={<UserSettingsPage />} />
         <Route path="/completed/:listType" element={<UserListGames />} />
         <Route path="/developer/:id" element={<DeveloperPage />} />
         <Route path="/publisher/:id" element={<PublisherPage />} />

@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -13,12 +12,35 @@ import {
   Select
 } from "@mui/material"
 import { useAppSelector } from "../hooks/redux";
-
+import { userAPI } from "../store/api/userApi";
+import { useState } from "react";
 
 const UserSettingsPage = () => {
-  const { id } = useParams();
   const { user } = useAppSelector(state => state.userReducer);
+  const [success, setSuccess] = useState(null)
+  const [updateUser, { isLoading }] = userAPI.useUpdateUserMutation()
   const theme = createTheme();
+
+  const handleSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const target = event.currentTarget as HTMLFormElement;
+    const data = new FormData(target);
+    const userData = {
+      id: user?.user.id,
+      nickname: data.get('nickname')?.toString(),
+      password: data.get('password')?.toString() || null,
+      email: data.get('email')?.toString(),
+      age: Number(data.get('age')),
+      gender: data.get('gender')?.toString(),
+    }
+    const res = await updateUser(userData)
+    if (res.error) {
+      setSuccess(res.error.data)
+      setTimeout(() => {
+        setSuccess(null)
+      }, 4000)
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -36,6 +58,7 @@ const UserSettingsPage = () => {
         </Box>
         {user && (
           <Box
+            component="form" onSubmit={handleSubmit} noValidate
             sx={{
               marginTop: 8,
               display: 'flex',
@@ -55,7 +78,7 @@ const UserSettingsPage = () => {
                 fullWidth
                 id="nickname"
                 name="nickname"
-                value={user?.user.nickname}
+                defaultValue={user?.user.nickname}
                 autoFocus
               />
               <InputLabel id="demo-simple-select-label" style={{ marginBottom: -10 }}>E-mail</InputLabel>
@@ -65,7 +88,7 @@ const UserSettingsPage = () => {
                 fullWidth
                 id="email"
                 name="email"
-                value={user?.user.email}
+                defaultValue={user?.user.email}
               />
               <InputLabel id="demo-simple-select-label" style={{ marginBottom: -10 }}>Password</InputLabel>
               <TextField
@@ -79,8 +102,11 @@ const UserSettingsPage = () => {
               <Button
                 variant="contained"
                 color="error"
+                sx={{ marginTop: 2 }}
               >
-                DELETE USER
+                <Typography component="h1" variant="h6">
+                  DELETE USER
+                </Typography>
               </Button>
             </Box>
             <Box sx={{
@@ -94,8 +120,9 @@ const UserSettingsPage = () => {
                 required
                 fullWidth
                 type="number"
+                name="age"
                 id="age"
-                value={user?.user.age}
+                defaultValue={user?.user.age}
               />
               <InputLabel id="demo-simple-select-label">Gender</InputLabel>
               <Select
@@ -103,13 +130,13 @@ const UserSettingsPage = () => {
                 fullWidth
                 name="gender"
                 id="gender"
-                defaultValue={user ? user.user.gender : "Male"}
+                defaultValue={user ? user.user.gender : "male"}
               >
-                <MenuItem value="Male">
-                  Male
+                <MenuItem value="male">
+                  male
                 </MenuItem>
-                <MenuItem value="Female">
-                  Female
+                <MenuItem value="female">
+                  female
                 </MenuItem>
               </Select>
               <Box sx={{
@@ -129,7 +156,8 @@ const UserSettingsPage = () => {
                     variant="contained"
                     style={{
                       float: 'right',
-                      width: 250
+                      width: 250,
+                      marginTop: -20
                     }}
                   >
                     Choose new avatar
@@ -137,7 +165,7 @@ const UserSettingsPage = () => {
                   <Box style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    marginTop: 55,
+                    marginTop: 80,
                     float: 'right'
                   }}>
                     <Button
@@ -150,6 +178,7 @@ const UserSettingsPage = () => {
                     </Button>
                     <Button
                       variant="contained"
+                      type="submit"
                     >
                       Save
                     </Button>
@@ -157,6 +186,17 @@ const UserSettingsPage = () => {
                 </Box>
               </Box>
             </Box>
+          </Box>
+        )}
+        {success && (
+          <Box sx={{
+            marginTop: 8,
+            display: 'flex',
+            justifyContent: 'center'
+          }}>
+            <Typography component="h1" variant="h5" style={{ color: '#198754' }}>
+              {success}
+            </Typography>
           </Box>
         )}
       </Container>
