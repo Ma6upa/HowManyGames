@@ -19,6 +19,50 @@ export const pictureAPI = createApi({
         },
         body: userData.data
       })
-    })
+    }),
+    uploadDeveloperPicture: build.mutation<string, PictureId>({
+      query: (developerData) => ({
+        url: '/uploadDeveloperPicture',
+        method: 'PUT',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        params: {
+          userId: developerData.id
+        },
+        body: developerData.data
+      })
+    }),
+    uploadDeveloperMiniPicture: build.mutation<string, PictureId>({
+      query: (developerData) => ({
+        url: '/uploadDeveloperMiniPicture',
+        method: 'PUT',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        params: {
+          userId: developerData.id
+        },
+        body: developerData.data
+      })
+    }),
+    uploadPublisherPicture: build.mutation<string, PictureId>({
+      query: (publisherData) => ({
+        url: '/uploadPublisherPicture',
+        method: 'PUT',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        params: {
+          userId: publisherData.id
+        },
+        body: publisherData.data
+      })
+    }),
+    uploadPublisherMiniPicture: build.mutation<string, PictureId>({
+      query: (publisherData) => ({
+        url: '/uploadPublisherMiniPicture',
+        method: 'PUT',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        params: {
+          userId: publisherData.id
+        },
+        body: publisherData.data
+      })
+    }),
   })
 })
