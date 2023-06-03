@@ -8,6 +8,7 @@ import { userAPI } from "./api/userApi";
 import { GlobalStatisticAPI } from "./api/statisticsApi";
 import { FiltersAndConstsAPI } from "./api/filterAndConsts";
 import { searchAPI } from "./api/searchApi";
+import { pictureAPI } from "./api/pictureApi";
 
 const rootReducer = combineReducers({
   userReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   [GlobalStatisticAPI.reducerPath]: GlobalStatisticAPI.reducer,
   [FiltersAndConstsAPI.reducerPath]: FiltersAndConstsAPI.reducer,
   [searchAPI.reducerPath]: searchAPI.reducer,
+  [pictureAPI.reducerPath]: pictureAPI.reducer,
 })
 
 export const setupStore = () => {
@@ -33,6 +35,7 @@ export const setupStore = () => {
     .concat(GlobalStatisticAPI.middleware)
     .concat(FiltersAndConstsAPI.middleware)
     .concat(searchAPI.middleware)
+    .concat(pictureAPI.middleware)
   })
 }
 

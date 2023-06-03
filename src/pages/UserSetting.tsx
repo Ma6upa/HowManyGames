@@ -15,15 +15,25 @@ import {
 } from "@mui/material"
 import { useAppSelector } from "../hooks/redux";
 import { userAPI } from "../store/api/userApi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { pictureAPI } from "../store/api/pictureApi";
 
 const UserSettingsPage = () => {
   const { user } = useAppSelector(state => state.userReducer);
   const [success, setSuccess] = useState(null)
+  const [picSuccess, setPicSuccess] = useState(null)
+  const [picError, setPicError] = useState(null)
   const [openModal, setOpenModal] = useState(false)
+  const [avatar, setAvatar] = useState<string>(import.meta.env.VITE_API + `/uploads/userPicture/Def.jpg`);
   const [updateUser] = userAPI.useUpdateUserMutation()
   const [deleteUser] = userAPI.useDeleteUserMutation()
+  const [uploadPicture] = pictureAPI.useUploadUserPicMutation()
   const theme = createTheme();
+  const reader = new FileReader();
+
+  useEffect(() => {
+    if (user) setAvatar(import.meta.env.VITE_API + `/${user.user.picturePath}`)
+  }, [user])
 
   const handleClose = () => {
     setOpenModal(false)
@@ -46,6 +56,26 @@ const UserSettingsPage = () => {
       email: data.get('email')?.toString(),
       age: Number(data.get('age')),
       gender: data.get('gender')?.toString(),
+    }
+    let formData = new FormData()
+    formData.append('pic', data.get('userPic'))
+    const pictureData = {
+      id: user?.user.id || null,
+      data: formData,
+    }
+    if (data.get('userPic')) {
+      const response = await uploadPicture(pictureData)
+      if (response.error.data === 'Successfully updated') {
+        setPicSuccess('Succesfully updated user picture')
+        setTimeout(() => {
+          setPicSuccess(null)
+        }, 4000)
+      } else {
+        setPicError('Failed to update user picture')
+        setTimeout(() => {
+          setPicError(null)
+        }, 4000)
+      }
     }
     const res = await updateUser(userData)
     if (res.error) {
@@ -158,7 +188,7 @@ const UserSettingsPage = () => {
                 display: 'flex',
                 flexDirection: 'row'
               }}>
-                <img src={import.meta.env.VITE_API + `/${user.user.picturePath}`} style={{
+                <img src={avatar} style={{
                   width: 150,
                   height: 150,
                   marginTop: 20
@@ -169,6 +199,7 @@ const UserSettingsPage = () => {
                 }}>
                   <Button
                     variant="contained"
+                    component="label"
                     style={{
                       float: 'right',
                       width: 250,
@@ -176,6 +207,20 @@ const UserSettingsPage = () => {
                     }}
                   >
                     Choose new avatar
+                    <input
+                      type="file"
+                      accept="image/png, image/webp, image/jpeg, image/jpg"
+                      name="userPic"
+                      id="userPic"
+                      onChange={(e) => {
+                        const file = e.target.files![0];
+                        reader.readAsDataURL(file)!
+                        reader.onloadend = () => {
+                          setAvatar(reader.result as string)
+                        };
+                      }}
+                      hidden
+                    />
                   </Button>
                   <Box style={{
                     display: 'flex',
@@ -211,6 +256,28 @@ const UserSettingsPage = () => {
           }}>
             <Typography component="h1" variant="h5" style={{ color: '#198754' }}>
               {success}
+            </Typography>
+          </Box>
+        )}
+        {picSuccess && (
+          <Box sx={{
+            marginTop: 8,
+            display: 'flex',
+            justifyContent: 'center'
+          }}>
+            <Typography component="h1" variant="h5" style={{ color: '#198754' }}>
+              {picSuccess}
+            </Typography>
+          </Box>
+        )}
+        {picError && (
+          <Box sx={{
+            marginTop: 8,
+            display: 'flex',
+            justifyContent: 'center'
+          }}>
+            <Typography component="h1" variant="h5" style={{ color: '#d0342c' }}>
+              {picError}
             </Typography>
           </Box>
         )}
