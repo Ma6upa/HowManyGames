@@ -9,7 +9,9 @@ import {
   createTheme,
   InputLabel,
   MenuItem,
-  Select
+  Select,
+  Modal,
+  Divider
 } from "@mui/material"
 import { useAppSelector } from "../hooks/redux";
 import { userAPI } from "../store/api/userApi";
@@ -18,8 +20,20 @@ import { useState } from "react";
 const UserSettingsPage = () => {
   const { user } = useAppSelector(state => state.userReducer);
   const [success, setSuccess] = useState(null)
-  const [updateUser, { isLoading }] = userAPI.useUpdateUserMutation()
+  const [openModal, setOpenModal] = useState(false)
+  const [updateUser] = userAPI.useUpdateUserMutation()
+  const [deleteUser] = userAPI.useDeleteUserMutation()
   const theme = createTheme();
+
+  const handleClose = () => {
+    setOpenModal(false)
+  }
+
+  const handleDelete = async () => {
+    await deleteUser(user.user.id)
+    localStorage.removeItem('token')
+    window.location.href = '/login'
+  }
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -103,6 +117,7 @@ const UserSettingsPage = () => {
                 variant="contained"
                 color="error"
                 sx={{ marginTop: 2 }}
+                onClick={() => setOpenModal(true)}
               >
                 <Typography component="h1" variant="h6">
                   DELETE USER
@@ -200,6 +215,55 @@ const UserSettingsPage = () => {
           </Box>
         )}
       </Container>
+      <Modal
+        open={openModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Container component="main" maxWidth="md">
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            marginTop: '30%',
+            borderRadius: 5,
+            padding: 5
+          }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6">
+                Are you sure you want to delete your account?
+              </Typography>
+              <Typography variant="h6">
+                (this can not be undone)
+              </Typography>
+              <Divider />
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  marginTop: 2,
+
+                }}
+              >
+                <Button
+                  variant="contained"
+                  onClick={handleDelete}
+                >
+                  OK
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </Modal>
     </ThemeProvider>
   )
 }

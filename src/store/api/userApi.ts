@@ -39,7 +39,7 @@ export const userAPI = createApi({
         url: '/deleteUser',
         method: 'DELETE',
         headers: { Authorization: `bearer ${localStorage.getItem('token')}` },
-        body: {
+        params: {
           userDelete: id
         }
       })
