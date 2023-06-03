@@ -28,7 +28,7 @@ export const publisherAPI = createApi({
   reducerPath: 'publisherAPI',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API + '/api/Publisher' }),
   endpoints: (build) => ({
-    fetchAllPublishers: build.query<IPublisher[], any>({
+    fetchAllPublishers: build.query<IPublisher[], void>({
       query: () => ({
         url: '/publisherAll',
       })
