@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Box,
@@ -17,6 +17,7 @@ import { userAPI } from "../store/api/userApi";
 
 const AuthForm = () => {
   const theme = createTheme();
+  const [error, setError] = useState(null)
   const [login, { }] = authRegAPI.useLoginMutation();
   const [fetchUser, { }] = userAPI.useFetchUserMutation();
   const { user } = useAppSelector(state => state.userReducer)
@@ -43,9 +44,17 @@ const AuthForm = () => {
       nickname: data.get('nickname')?.toString() || null,
     }
     const res = await login(userData)
-    localStorage.setItem('token', res.error.data)
-    const userRes = await fetchUser(Number(parseJwt(res.error.data).Id))
-    dispatch(addUser(userRes.data))
+    if ('originalStatus' in res.error) {
+      if (res.error.originalStatus === 200) {
+        localStorage.setItem('token', res.error.data)
+        const userRes = await fetchUser(Number(parseJwt(res.error.data).Id))
+        dispatch(addUser(userRes.data))
+      } else {
+        setError(res.error.data)
+      }
+    } else {
+      setError('Something went wrong')
+    }
   }
 
   useEffect(() => {
@@ -104,6 +113,11 @@ const AuthForm = () => {
               </Button>
             </Link>
           </Box>
+          {error && (
+            <Typography component="h1" variant="h5" style={{ color: '#d0342c' }}>
+              {error}
+            </Typography>
+          )}
         </Box>
       </Container>
     </ThemeProvider>
