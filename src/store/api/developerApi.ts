@@ -28,7 +28,7 @@ export const developerAPI = createApi({
   reducerPath: 'developerAPI',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API + '/api/Developer' }),
   endpoints: (build) => ({
-    fetchAllDevelopers: build.query<IDeveloper[], any>({
+    fetchAllDevelopers: build.query<IDeveloper[], void>({
       query: () => ({
         url: '/developerAll',
       })
