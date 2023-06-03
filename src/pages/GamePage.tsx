@@ -29,6 +29,7 @@ const GamePage = () => {
   const [gameGenres, setGameGenres] = useState('Genres not found')
   const [gamePlatforms, setGamePlatforms] = useState('Platforms not found')
   const [gameTags, setGameTags] = useState('Tags not found')
+  const [userRating, setUserRating] = useState(0)
   const { user } = useAppSelector(state => state.userReducer)
 
   const handleClose = () => {
@@ -110,9 +111,11 @@ const GamePage = () => {
                       flexDirection: 'row',
                       width: '100%'
                     }}>
-                      <Rating name="half-rating" defaultValue={4} precision={0.5} style={{ marginTop: 2 }} />
+                      <Rating name="simple-controlled" value={userRating} precision={0.5} style={{ marginTop: 2 }} onChange={(event, newValue) => {
+                        setUserRating(newValue);
+                      }} />
                       <Typography variant="h5" style={{ marginLeft: 10 }}>
-                        8
+                        {userRating * 2}
                       </Typography>
                     </div>
                     <div>
