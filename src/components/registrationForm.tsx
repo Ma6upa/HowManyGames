@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react"
 import {
   Box,
   Button,
@@ -16,9 +17,11 @@ import { authRegAPI } from "../store/api/authRegApi";
 
 const RegistrationForm = () => {
   const theme = createTheme();
-  const [ registration, {} ] = authRegAPI.useRegistrationMutation()
+  const [error, setError] = useState(null)
+  const [registration, { }] = authRegAPI.useRegistrationMutation()
+  const navigate = useNavigate()
 
-  const handleSubmit = (event: React.SyntheticEvent) => {
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     const target = event.currentTarget as HTMLFormElement;
     const data = new FormData(target);
@@ -29,7 +32,17 @@ const RegistrationForm = () => {
       age: Number(data.get('age')) || null,
       gender: data.get('gender')?.toString() || null,
     }
-    registration(userData)
+    const res = await registration(userData)
+    if (res.error.data !== 'Successfully created') {
+      if( typeof res.error.data === 'string') {
+        setError(res.error.data)
+      } else {
+        setError('Something went wrong')
+      }
+      
+    } else {
+      navigate('/login')
+    }
   }
 
   return (
@@ -114,6 +127,11 @@ const RegistrationForm = () => {
               </Button>
             </Link>
           </Box>
+          {error && (
+            <Typography component="h1" variant="h5" style={{ color: '#d0342c' }}>
+              {error}
+            </Typography>
+          )}
         </Box>
       </Container>
     </ThemeProvider>
