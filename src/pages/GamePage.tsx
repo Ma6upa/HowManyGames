@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { gamesAPI } from "../store/api/gamesApi";
 import {
   Box,
@@ -15,26 +15,34 @@ import {
   Rating,
   Select,
   MenuItem,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  TextField
 } from "@mui/material"
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { useAppSelector } from "../hooks/redux";
+import { reviewAPI } from "../store/api/reviewApi";
+import { personGameAPI } from "../store/api/personGameApi";
 
 const GamePage = () => {
   const theme = createTheme();
   const { id } = useParams();
   const { data: game, isLoading } = gamesAPI.useGetGameQuery(Number(id))
   const { data: reviews, isLoading: isReviewsLoading } = gamesAPI.useGetGameReviewsQuery(Number(id))
+  const [createReview] = reviewAPI.useCreateReviewMutation()
+  const [gerPersonGame] = personGameAPI.useUserHaveThisPersonGameMutation()
   const [openModal, setOpenModal] = useState(false)
   const [gameGenres, setGameGenres] = useState('Genres not found')
   const [gamePlatforms, setGamePlatforms] = useState('Platforms not found')
   const [gameTags, setGameTags] = useState('Tags not found')
   const [userRating, setUserRating] = useState(0)
+  const [reviewRating, setReviewRating] = useState(0)
+  const [review, setReview] = useState<string | null>(null)
+  const [reviewError, setReviewError] = useState<string | null>(null)
   const { user } = useAppSelector(state => state.userReducer)
-
-  const handleClose = () => {
-    setOpenModal(false)
-  }
+  const navigate = useNavigate()
 
   useEffect(() => {
     let genreStr = ''
@@ -46,7 +54,36 @@ const GamePage = () => {
     setGamePlatforms(platformStr)
     game?.tags.forEach((item, index) => index === 0 ? tagsStr = item.name : tagsStr = tagsStr + ', ' + item.name);
     setGameTags(tagsStr)
+    gerPersonGame({
+      userId: user?.user.id,
+      gameId: game?.id
+    })
   }, [game])
+
+  const handleClose = () => {
+    setOpenModal(false)
+  }
+
+  const handleReview = async () => {
+    let date = new Date(Date.now());
+    let year = date.toLocaleString("default", { year: "numeric" });
+    let month = date.toLocaleString("default", { month: "2-digit" });
+    let day = date.toLocaleString("default", { day: "2-digit" });
+    if (review) {
+      await createReview({
+        userId: user?.user.id || null,
+        gameId: Number(id),
+        text: review,
+        publishDate: year + "-" + month + "-" + day
+      })
+      navigate(0)
+    } else {
+      setReviewError('Review field is empty')
+      setTimeout(() => {
+        setReviewError(null)
+      }, 4000)
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -401,6 +438,71 @@ const GamePage = () => {
                 </Box>
               </Card>
             </Box>
+            {user && (
+              <Accordion style={{ marginTop: 10, width: '100%' }}>
+                <AccordionSummary>
+                  <Typography variant="h6">
+                    Write a new review
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Card variant="outlined" style={{
+                    padding: 10
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row'
+                      }}>
+                        <img src={import.meta.env.VITE_API + `/${user.user.picturePath}`} style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: 25
+                        }} alt="No picture" />
+                        <div style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          marginLeft: 10
+                        }}>
+                          <Typography variant="h6" style={{ marginTop: 10 }}>
+                            {user.user.nickname}
+                          </Typography>
+                        </div>
+                      </div>
+                    </div>
+                    <TextField
+                      multiline
+                      rows={3}
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="review"
+                      name="review"
+                      placeholder="Write your review here"
+                      onChange={(event) => setReview(event.target.value)}
+                    />
+                    {reviewError && (
+                      <Typography component="h1" variant="h5" style={{ color: '#d0342c', float: 'left' }}>
+                        {reviewError}
+                      </Typography>
+                    )}
+                    <Button
+                      variant="contained"
+                      onClick={handleReview}
+                      style={{
+                        float: 'right'
+                      }}
+                    >
+                      Add review
+                    </Button>
+                  </Card>
+                </AccordionDetails>
+              </Accordion>
+            )}
             <Box sx={{
               width: '100%',
             }}>

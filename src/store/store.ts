@@ -9,6 +9,8 @@ import { GlobalStatisticAPI } from "./api/statisticsApi";
 import { FiltersAndConstsAPI } from "./api/filterAndConsts";
 import { searchAPI } from "./api/searchApi";
 import { pictureAPI } from "./api/pictureApi";
+import { reviewAPI } from "./api/reviewApi";
+import { personGameAPI } from "./api/personGameApi";
 
 const rootReducer = combineReducers({
   userReducer,
@@ -21,6 +23,8 @@ const rootReducer = combineReducers({
   [FiltersAndConstsAPI.reducerPath]: FiltersAndConstsAPI.reducer,
   [searchAPI.reducerPath]: searchAPI.reducer,
   [pictureAPI.reducerPath]: pictureAPI.reducer,
+  [reviewAPI.reducerPath]: reviewAPI.reducer,
+  [personGameAPI.reducerPath]: personGameAPI.reducer,
 })
 
 export const setupStore = () => {
@@ -36,6 +40,8 @@ export const setupStore = () => {
     .concat(FiltersAndConstsAPI.middleware)
     .concat(searchAPI.middleware)
     .concat(pictureAPI.middleware)
+    .concat(reviewAPI.middleware)
+    .concat(personGameAPI.middleware)
   })
 }
 
