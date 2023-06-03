@@ -36,14 +36,22 @@ const SearchAutocomplete: FC = () => {
 
   useEffect(() => {
     if (autoComplete) {
-    setAutoCompleteOptions(
-      [
-        { label: autoComplete?.games.length ? 'games' : '1', data: autoComplete?.games },
-        { label: autoComplete?.developers.length ? 'developers' : '2', data: autoComplete?.developers },
-        { label: autoComplete?.publishers.length ? 'publishers' : '3', data: autoComplete?.publishers },
-        { label: autoComplete?.users.length ? 'users' : '4', data: autoComplete?.users }
-      ]
-    )
+      if (!autoComplete?.games.length && !autoComplete?.developers.length && !autoComplete?.publishers.length && !autoComplete?.users.length) {
+        setAutoCompleteOptions(
+          [
+            { label: 'no options', data: autoComplete?.games },
+          ]
+        )
+      } else {
+        setAutoCompleteOptions(
+          [
+            { label: autoComplete?.games.length ? 'games' : '1', data: autoComplete?.games },
+            { label: autoComplete?.developers.length ? 'developers' : '2', data: autoComplete?.developers },
+            { label: autoComplete?.publishers.length ? 'publishers' : '3', data: autoComplete?.publishers },
+            { label: autoComplete?.users.length ? 'users' : '4', data: autoComplete?.users }
+          ]
+        )
+      }
     } else {
       setAutoCompleteOptions(
         [

@@ -15,7 +15,6 @@ interface SearchFieldsProps {
 const SearchFields: FC<SearchFieldsProps> = ({
   data
 }) => {
-  console.log(data)
   return (
     <>
       {data.label === 'no options' && (
