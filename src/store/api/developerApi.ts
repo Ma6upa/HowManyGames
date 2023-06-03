@@ -80,9 +80,10 @@ export const developerAPI = createApi({
         body: developerData
       })
     }),
-    deleteDeveloper: build.query<string, number>({
+    deleteDeveloper: build.mutation<string, number>({
       query: (id) => ({
         url: '/deleteDeveloper',
+        method: 'DELETE',
         headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
         params: {
           developerDelete: id

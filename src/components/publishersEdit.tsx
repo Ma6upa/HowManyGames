@@ -33,6 +33,7 @@ const PublishersEdit = () => {
   const [uploadPublisherMiniPicture] = pictureAPI.useUploadPublisherMiniPictureMutation()
   const { data: publishers } = publisherAPI.useFetchAllPublishersQuery()
   const [fetchAllPublishers] = publisherAPI.useLazyFetchAllPublishersQuery()
+  const [deletePublisher] = publisherAPI.useDeletePublisherMutation()
   const [publisherPicture, setPublisherPicture] = useState<string | null>(null)
   const [publisherMiniPicture, setPublisherMiniPicture] = useState<string | null>(null)
   const [pictureUpdated, setPictureUpdated] = useState<boolean>(false)
@@ -108,6 +109,14 @@ const PublishersEdit = () => {
         }
       }
     }
+    fetchAllPublishers()
+  }
+  
+  const handleDelete = async () => {
+    await deletePublisher(publisher?.id)
+    setPictureUpdated(false)
+    setMiniPictureUpdated(false)
+    setOpenModal(false)
     fetchAllPublishers()
   }
 
@@ -380,9 +389,7 @@ const PublishersEdit = () => {
                     variant="contained"
                     color="error"
                     sx={{ mt: 3, mb: 2, float: 'left', mr: 2 }}
-                    onClick={() => {
-                      setOpenModal(false)
-                    }}
+                    onClick={handleDelete}
                   >
                     Remove
                   </Button>

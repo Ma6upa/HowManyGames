@@ -80,12 +80,13 @@ export const publisherAPI = createApi({
         body: publisherData
       })
     }),
-    deletePublisher: build.query<string, number>({
+    deletePublisher: build.mutation<string, number>({
       query: (id) => ({
         url: '/deletePublisher',
+        method: 'DELETE',
         headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
         params: {
-          publisherDelete: id
+          deletePublisher: id
         }
       })
     }),

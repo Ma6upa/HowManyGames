@@ -31,6 +31,7 @@ const DevelopersEdit = () => {
   const [updateDeveloper] = developerAPI.useUpdateDeveloperMutation()
   const [uploadDeveloperPicture] = pictureAPI.useUploadDeveloperPictureMutation()
   const [uploadDeveloperMiniPicture] = pictureAPI.useUploadDeveloperMiniPictureMutation()
+  const [deleteDeveloper] = developerAPI.useDeleteDeveloperMutation()
   const { data: developers } = developerAPI.useFetchAllDevelopersQuery()
   const [fetchAllDevelopers] = developerAPI.useLazyFetchAllDevelopersQuery()
   const [developerPicture, setDeveloperPicture] = useState<string | null>(null)
@@ -74,6 +75,14 @@ const DevelopersEdit = () => {
       }
       await uploadDeveloperMiniPicture(miniPictureData)
     }
+    setPictureUpdated(false)
+    setMiniPictureUpdated(false)
+    setOpenModal(false)
+    fetchAllDevelopers()
+  }
+
+  const handleDelete = async () => {
+    await deleteDeveloper(developer?.id)
     setPictureUpdated(false)
     setMiniPictureUpdated(false)
     setOpenModal(false)
@@ -380,9 +389,7 @@ const DevelopersEdit = () => {
                     variant="contained"
                     color="error"
                     sx={{ mt: 3, mb: 2, float: 'left', mr: 2 }}
-                    onClick={() => {
-                      setOpenModal(false)
-                    }}
+                    onClick={handleDelete}
                   >
                     Remove
                   </Button>
