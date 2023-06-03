@@ -17,6 +17,8 @@ import GamePage from "./pages/GamePage";
 import { useAppDispatch, useAppSelector } from "./hooks/redux";
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import CodeIcon from '@mui/icons-material/Code';
+import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import { userAPI } from "./store/api/userApi";
 import { userSlice } from "./store/reducers/UserSlice";
 import UserPage from "./pages/UserPage";
@@ -26,10 +28,12 @@ import StatisticsPage from "./pages/StatisticsPage";
 import SearchAutocomplete from "./components/searchAutocomplete";
 import DeveloperPage from "./pages/DeveloperPage";
 import PublisherPage from "./pages/PublisherPage";
+import DevelopersPublishersEditPage from "./pages/DevelopersEditPage";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
   const [anchorEl, setAnchorEl] = useState(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
   const [fetchUser, { }] = userAPI.useFetchUserMutation();
   const { addUser } = userSlice.actions;
   const dispatch = useAppDispatch();
@@ -67,6 +71,10 @@ const App = () => {
       autoLogin(localStorage.getItem('token')!)
     }
   }, [])
+
+  useEffect(() => {
+    setIsAdmin(user?.user.userRoles[1].roleName === 'admin')
+  }, [user])
 
   return (
     <>
@@ -170,7 +178,7 @@ const App = () => {
                       <SettingsIcon />
                       <Typography variant="h6" style={{
                         marginLeft: 5,
-                        marginTop: -2
+                        marginTop: -3
                       }}>
                         Settings
                       </Typography>
@@ -189,12 +197,50 @@ const App = () => {
                     <LogoutIcon />
                     <Typography variant="h6" style={{
                       marginLeft: 5,
-                      marginTop: -2
+                      marginTop: -3
                     }}>
                       Log out
                     </Typography>
                   </div>
                 </MenuItem>
+                {isAdmin && (
+                  <MenuItem onClick={handleClose}>
+                    <Link to={'/edit/developers'} style={{ textDecoration: 'none', color: 'black' }}>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 2
+                      }}>
+                        <CodeIcon />
+                        <Typography variant="h6" style={{
+                          marginLeft: 5,
+                          marginTop: -3
+                        }}>
+                          Developers
+                        </Typography>
+                      </div>
+                    </Link>
+                  </MenuItem>
+                )}
+                {isAdmin && (
+                  <MenuItem onClick={handleClose}>
+                    <Link to={'/edit/publishers'} style={{ textDecoration: 'none', color: 'black' }}>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 2
+                      }}>
+                        <PublishedWithChangesIcon />
+                        <Typography variant="h6" style={{
+                          marginLeft: 5,
+                          marginTop: -3
+                        }}>
+                          Publishers
+                        </Typography>
+                      </div>
+                    </Link>
+                  </MenuItem>
+                )}
               </Menu>
             </div>
           )}
@@ -211,6 +257,7 @@ const App = () => {
         <Route path="/developer/:id" element={<DeveloperPage />} />
         <Route path="/publisher/:id" element={<PublisherPage />} />
         <Route path="/statistics" element={<StatisticsPage />} />
+        <Route path="/edit/:entity" element={<DevelopersPublishersEditPage />} />
       </Routes>
     </>
   )
