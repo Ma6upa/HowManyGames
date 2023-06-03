@@ -26,7 +26,7 @@ export const pictureAPI = createApi({
         method: 'PUT',
         headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
         params: {
-          userId: developerData.id
+          developerId: developerData.id
         },
         body: developerData.data
       })
@@ -37,7 +37,7 @@ export const pictureAPI = createApi({
         method: 'PUT',
         headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
         params: {
-          userId: developerData.id
+          developerId: developerData.id
         },
         body: developerData.data
       })
@@ -48,7 +48,7 @@ export const pictureAPI = createApi({
         method: 'PUT',
         headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
         params: {
-          userId: publisherData.id
+          publisherId: publisherData.id
         },
         body: publisherData.data
       })
@@ -59,7 +59,7 @@ export const pictureAPI = createApi({
         method: 'PUT',
         headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
         params: {
-          userId: publisherData.id
+          publisherId: publisherData.id
         },
         body: publisherData.data
       })
