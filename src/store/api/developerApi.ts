@@ -64,5 +64,30 @@ export const developerAPI = createApi({
         }
       }),
     }),
+    createDeveloper: build.mutation<string, {name: string, description: string}>({
+      query: (developerData) => ({
+        url: '/createDeveloper',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        method: 'POST',
+        body: developerData
+      })
+    }),
+    updateDeveloper: build.mutation<string, {id: number, name: string, description: string}>({
+      query: (developerData) => ({
+        url: '/updateDeveloper',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        method: 'PUT',
+        body: developerData
+      })
+    }),
+    deleteDeveloper: build.query<string, number>({
+      query: (id) => ({
+        url: '/deleteDeveloper',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        params: {
+          developerDelete: id
+        }
+      })
+    }),
   })
 })
