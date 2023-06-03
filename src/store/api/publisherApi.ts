@@ -64,5 +64,30 @@ export const publisherAPI = createApi({
         }
       }),
     }),
+    createPublisher: build.mutation<string, {name: string, description: string}>({
+      query: (publisherData) => ({
+        url: '/createPublisher',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        method: 'POST',
+        body: publisherData
+      })
+    }),
+    updatePublisher: build.mutation<string, {id: number, name: string, description: string}>({
+      query: (publisherData) => ({
+        url: '/updatePublisher',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        method: 'PUT',
+        body: publisherData
+      })
+    }),
+    deletePublisher: build.query<string, number>({
+      query: (id) => ({
+        url: '/deletePublisher',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        params: {
+          publisherDelete: id
+        }
+      })
+    }),
   })
 })
