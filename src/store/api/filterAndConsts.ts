@@ -11,7 +11,7 @@ export const FiltersAndConstsAPI = createApi({
         url: '/filter',
       })
     }),
-    fetchConsts: build.query<IConsts, any>({
+    fetchConsts: build.query<IConsts, void>({
       query: (id) => ({
         url: '/consts',
       })

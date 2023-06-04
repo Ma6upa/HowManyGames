@@ -27,7 +27,7 @@ export const gamesAPI = createApi({
   reducerPath: 'gamesAPI',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API + '/api/Game' }),
   endpoints: (build) => ({
-    getAllGames: build.mutation<{apiResponse: IGame[], headers: any}, IFilters>({
+    getAllGames: build.mutation<{ apiResponse: IGame[], headers: any }, IFilters>({
       query: (filters) => ({
         url: '/games',
         method: 'POST',
@@ -65,6 +65,14 @@ export const gamesAPI = createApi({
       query: (id) => ({
         url: `/${id}/review`,
       })
-    })
+    }),
+    createGame: build.mutation<string, IGame>({
+      query: (game) => ({
+        url: '/createGame',
+        method: 'POST',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}` },
+        body: game
+      })
+    }),
   })
 })
