@@ -78,13 +78,27 @@ const GamePage = () => {
         id: personGame?.id,
         score: userRating > 0 ? userRating * 2 : personGame?.score,
         comment: personGame?.comment,
-        list: personGame?.list,
+        list: userList ? userList : personGame?.list,
         playedPlatform: personGame?.playedPlatform ? personGame?.playedPlatform.id : 0,
         favourite: personGame?.favourite
       }
       updatePesonGame(personGameData)
     }
   }, [userRating])
+
+  useEffect(() => {
+    if (userList) {
+      const personGameData = {
+        id: personGame?.id,
+        score: userRating > 0 ? userRating * 2 : personGame?.score,
+        comment: personGame?.comment,
+        list: userList ? userList : personGame?.list,
+        playedPlatform: personGame?.playedPlatform ? personGame?.playedPlatform.id : 0,
+        favourite: personGame?.favourite
+      }
+      updatePesonGame(personGameData)
+    }
+  }, [userList])
 
   const handleClose = () => {
     setOpenModal(false)
