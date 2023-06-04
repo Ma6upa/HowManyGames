@@ -25,6 +25,7 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { useAppSelector } from "../hooks/redux";
 import { reviewAPI } from "../store/api/reviewApi";
 import { personGameAPI } from "../store/api/personGameApi";
+import { IPersonGame } from "../interfaces/IGame";
 
 const GamePage = () => {
   const theme = createTheme();
@@ -32,33 +33,58 @@ const GamePage = () => {
   const { data: game, isLoading } = gamesAPI.useGetGameQuery(Number(id))
   const { data: reviews, isLoading: isReviewsLoading } = gamesAPI.useGetGameReviewsQuery(Number(id))
   const [createReview] = reviewAPI.useCreateReviewMutation()
-  const [gerPersonGame] = personGameAPI.useUserHaveThisPersonGameMutation()
+  const [getPersonGame] = personGameAPI.useUserHaveThisPersonGameMutation()
+  const [updatePesonGame] = personGameAPI.useUpdatePersonGameMutation()
   const [openModal, setOpenModal] = useState(false)
   const [gameGenres, setGameGenres] = useState('Genres not found')
   const [gamePlatforms, setGamePlatforms] = useState('Platforms not found')
   const [gameTags, setGameTags] = useState('Tags not found')
   const [userRating, setUserRating] = useState(0)
-  const [reviewRating, setReviewRating] = useState(0)
+  const [userList, setUserList] = useState('')
   const [review, setReview] = useState<string | null>(null)
   const [reviewError, setReviewError] = useState<string | null>(null)
   const { user } = useAppSelector(state => state.userReducer)
+  const [personGame, setPersonGame] = useState<IPersonGame | null>(null)
   const navigate = useNavigate()
 
   useEffect(() => {
-    let genreStr = ''
-    let platformStr = ''
-    let tagsStr = ''
-    game?.genres.forEach((item, index) => index === 0 ? genreStr = item.name : genreStr = genreStr + ', ' + item.name);
-    setGameGenres(genreStr)
-    game?.platforms.forEach((item, index) => index === 0 ? platformStr = item.name : platformStr = platformStr + ', ' + item.name);
-    setGamePlatforms(platformStr)
-    game?.tags.forEach((item, index) => index === 0 ? tagsStr = item.name : tagsStr = tagsStr + ', ' + item.name);
-    setGameTags(tagsStr)
-    gerPersonGame({
+    if (game) {
+      let genreStr = ''
+      let platformStr = ''
+      let tagsStr = ''
+      game?.genres.forEach((item, index) => index === 0 ? genreStr = item.name : genreStr = genreStr + ', ' + item.name);
+      setGameGenres(genreStr)
+      game?.platforms.forEach((item, index) => index === 0 ? platformStr = item.name : platformStr = platformStr + ', ' + item.name);
+      setGamePlatforms(platformStr)
+      game?.tags.forEach((item, index) => index === 0 ? tagsStr = item.name : tagsStr = tagsStr + ', ' + item.name);
+      setGameTags(tagsStr)
+      checkPersonGame()
+    }
+  }, [game])
+
+  const checkPersonGame = async () => {
+    const res = await getPersonGame({
       userId: user?.user.id,
       gameId: game?.id
     })
-  }, [game])
+    if (res.data) {
+      setPersonGame(res.data)
+    }
+  }
+
+  useEffect(() => {
+    if (userRating) {
+      const personGameData = {
+        id: personGame?.id,
+        score: userRating > 0 ? userRating * 2 : personGame?.score,
+        comment: personGame?.comment,
+        list: personGame?.list,
+        playedPlatform: personGame?.playedPlatform ? personGame?.playedPlatform.id : 0,
+        favourite: personGame?.favourite
+      }
+      updatePesonGame(personGameData)
+    }
+  }, [userRating])
 
   const handleClose = () => {
     setOpenModal(false)
@@ -131,7 +157,7 @@ const GamePage = () => {
                 <img src={import.meta.env.VITE_API + `/${game?.picturePath}`} style={{
                   width: '100%',
                 }} alt="No picture" />
-                {!user && (
+                {!personGame && (
                   <Button
                     onClick={() => setOpenModal(true)}
                     style={{ left: 0 }}
@@ -139,7 +165,7 @@ const GamePage = () => {
                     Add to list +
                   </Button>
                 )}
-                {user && (
+                {personGame && (
                   <div style={{
                     width: '100%'
                   }}>
@@ -148,41 +174,45 @@ const GamePage = () => {
                       flexDirection: 'row',
                       width: '100%'
                     }}>
-                      <Rating name="simple-controlled" value={userRating} precision={0.5} style={{ marginTop: 2 }} onChange={(event, newValue) => {
+                      <Rating name="simple-controlled" value={userRating ? userRating : personGame.score / 2} precision={0.5} style={{ marginTop: 2 }} onChange={(event, newValue) => {
                         setUserRating(newValue);
                       }} />
                       <Typography variant="h5" style={{ marginLeft: 10 }}>
-                        {userRating * 2}
+                        {userRating ?
+                          userRating * 2
+                          :
+                          personGame.score
+                        }
                       </Typography>
                     </div>
                     <div>
                       <Select
                         required
                         id="sortBy"
-                        defaultValue="Planned"
+                        defaultValue={personGame.list.toLowerCase()}
                         style={{
                           width: '100%'
                         }}
+                        onChange={(event) => setUserList(event.target.value)}
                       >
-                        <MenuItem value="Planned">
+                        <MenuItem value="planned">
                           Planned
                         </MenuItem>
-                        <MenuItem value="Playing">
+                        <MenuItem value="playing">
                           Playing
                         </MenuItem>
-                        <MenuItem value="Completed">
+                        <MenuItem value="completed">
                           Completed
                         </MenuItem>
-                        <MenuItem value="Dropped">
+                        <MenuItem value="dropped">
                           Dropped
                         </MenuItem>
-                        <MenuItem value="On hold">
+                        <MenuItem value="onhold">
                           On hold
                         </MenuItem>
                       </Select>
                     </div>
                   </div>
-
                 )}
               </Box>
               <Box sx={{
@@ -438,7 +468,7 @@ const GamePage = () => {
                 </Box>
               </Card>
             </Box>
-            {user && (
+            {user && personGame && (
               <Accordion style={{ marginTop: 10, width: '100%' }}>
                 <AccordionSummary>
                   <Typography variant="h6">
