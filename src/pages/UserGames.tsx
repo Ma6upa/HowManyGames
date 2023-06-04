@@ -14,19 +14,71 @@ import {
   Modal,
   Divider,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Select,
+  MenuItem,
+  Rating
 } from "@mui/material"
 import { useAppSelector } from "../hooks/redux";
+import { useEffect } from "react"
+import { personGameAPI } from "../store/api/personGameApi";
+import { IPersonGame } from "../interfaces/IGame";
 
 const UserListGames = () => {
   const { listType } = useParams();
   const { user } = useAppSelector(state => state.userReducer);
   const theme = createTheme();
   const [openModal, setOpenModal] = useState(false)
+  const [fetchPersonGames] = personGameAPI.useFetchPersonGamesMutation()
+  const [updatePesonGame] = personGameAPI.useUpdatePersonGameMutation()
+  const [personGames, setPersonGames] = useState<IPersonGame[]>([])
+  const [personGame, setPersonGame] = useState<IPersonGame | null>(null)
+  const [userRating, setUserRating] = useState(0)
+  const [favourite, setFavourite] = useState(false)
+
+  const handleSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const target = event.currentTarget as HTMLFormElement;
+    const data = new FormData(target);
+    const personGameData = {
+      id: personGame?.id,
+      score: userRating > 0 ? userRating * 2 : personGame?.score,
+      comment: data.get('comment')?.toString(),
+      list: data.get('list')?.toString(),
+      playedPlatform: data.get('playedPlatform'),
+      favourite: favourite
+    }
+    updatePesonGame(personGameData)
+    setOpenModal(false)
+    setPersonGame(null)
+    setFavourite(false)
+    setUserRating(0)
+  }
 
   const handleClose = () => {
+    setPersonGame(null)
+    setFavourite(false)
+    setUserRating(0)
     setOpenModal(false)
   }
+
+  useEffect(() => {
+    console.log(personGame)
+  }, [personGame])
+
+  const fetchGames = async () => {
+    const res = await fetchPersonGames({
+      userId: user?.user.id,
+      list: listType === 'On hold' ? 'onhold' : listType
+    })
+    setPersonGames(res.data)
+  }
+
+  useEffect(() => {
+    if (user) {
+      fetchGames()
+    }
+  }, [user])
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,12 +120,6 @@ const UserListGames = () => {
                   padding: 1
                 }}>
                   <Box sx={{
-                    width: '10%',
-                    alignItems: 'flex-start'
-                  }}>
-                    Number
-                  </Box>
-                  <Box sx={{
                     width: '40%',
                     alignItems: 'flex-start'
                   }}>
@@ -101,259 +147,148 @@ const UserListGames = () => {
                     Actions
                   </Box>
                 </Box>
-                <Card variant="outlined" sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%',
-                  padding: 1
-                }}>
-                  <Box sx={{
-                    width: '10%',
-                    alignItems: 'flex-start'
+                {personGames.map((item) => (
+                  <Card variant="outlined" sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    padding: 1,
+                    marginTop: 2
                   }}>
-                    1
-                  </Box>
-                  <Box sx={{
-                    width: '40%',
-                    alignItems: 'flex-start'
-                  }}>
-                    Hollow Knight
-                  </Box>
-                  <Box sx={{
-                    width: '50%'
-                  }}></Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    10
-                  </Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    Game
-                  </Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    <Button
-                      variant="outlined"
-                      style={{
-                        padding: 1
-                      }}
-                      onClick={() => setOpenModal(true)}
-                    >
-                      Edit
-                    </Button>
-                  </Box>
-                </Card>
-                <Card variant="outlined" sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%',
-                  padding: 1,
-                  marginTop: 2
-                }}>
-                  <Box sx={{
-                    width: '10%',
-                    alignItems: 'flex-start'
-                  }}>
-                    2
-                  </Box>
-                  <Box sx={{
-                    width: '40%',
-                    alignItems: 'flex-start'
-                  }}>
-                    Euro Truck Simulator
-                  </Box>
-                  <Box sx={{
-                    width: '50%'
-                  }}></Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    10
-                  </Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    Game
-                  </Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    <Button
-                      variant="outlined"
-                      style={{
-                        padding: 1
-                      }}
-                      onClick={() => setOpenModal(true)}
-                    >
-                      Edit
-                    </Button>
-                  </Box>
-                </Card>
-                <Card variant="outlined" sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%',
-                  padding: 1,
-                  marginTop: 2
-                }}>
-                  <Box sx={{
-                    width: '10%',
-                    alignItems: 'flex-start'
-                  }}>
-                    3
-                  </Box>
-                  <Box sx={{
-                    width: '40%',
-                    alignItems: 'flex-start'
-                  }}>
-                    Euro Truck Simulator: Going West!
-                  </Box>
-                  <Box sx={{
-                    width: '50%'
-                  }}></Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    10
-                  </Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    DLC
-                  </Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    <Button
-                      variant="outlined"
-                      style={{
-                        padding: 1
-                      }}
-                      onClick={() => setOpenModal(true)}
-                    >
-                      Edit
-                    </Button>
-                  </Box>
-                </Card>
-                <Card variant="outlined" sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%',
-                  padding: 1,
-                  marginTop: 2
-                }}>
-                  <Box sx={{
-                    width: '10%',
-                    alignItems: 'flex-start'
-                  }}>
-                    4
-                  </Box>
-                  <Box sx={{
-                    width: '40%',
-                    alignItems: 'flex-start'
-                  }}>
-                    Euro Truck Simulator: Going East!
-                  </Box>
-                  <Box sx={{
-                    width: '50%'
-                  }}></Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    10
-                  </Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    DLC
-                  </Box>
-                  <Box sx={{
-                    width: '20%',
-                    alignItems: 'flex-start'
-                  }}>
-                    <Button
-                      variant="outlined"
-                      style={{
-                        padding: 1
-                      }}
-                      onClick={() => setOpenModal(true)}
-                    >
-                      Edit
-                    </Button>
-                  </Box>
-                </Card>
+                    <Box sx={{
+                      width: '40%',
+                      alignItems: 'flex-start'
+                    }}>
+                      {item.game.name}
+                    </Box>
+                    <Box sx={{
+                      width: '50%'
+                    }}></Box>
+                    <Box sx={{
+                      width: '20%',
+                      alignItems: 'flex-start'
+                    }}>
+                      {item.score}
+                    </Box>
+                    <Box sx={{
+                      width: '20%',
+                      alignItems: 'flex-start'
+                    }}>
+                      {item.game.type}
+                    </Box>
+                    <Box sx={{
+                      width: '20%',
+                      alignItems: 'flex-start'
+                    }}>
+                      <Button
+                        variant="outlined"
+                        style={{
+                          padding: 1
+                        }}
+                        onClick={() => {
+                          setPersonGame(item)
+                          setFavourite(item.favourite)
+                          setOpenModal(true)
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </Box>
+                  </Card>
+                ))}
               </Box>
             </Box>
           )}
         </Box>
       </Container>
-      <Modal
-        open={openModal}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Container component="main" maxWidth="md">
-          <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            backgroundColor: 'white',
-            marginTop: '10%',
-            borderRadius: 5,
-            paddingTop: 2
-          }}>
+      {personGame && (
+        <Modal
+          open={openModal}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Container component="main" maxWidth="md">
             <Box
+              component="form" onSubmit={handleSubmit} noValidate
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                backgroundColor: 'white',
+                marginTop: '10%',
+                borderRadius: 5,
+                paddingTop: 2
               }}
             >
               <Typography variant="h6">
-                Hollow Knight
+                {personGame.game.name}
               </Typography>
               <Divider />
               <Box
                 sx={{
                   width: '80%',
                   alignItems: 'center',
-                  textAlign: 'center',
+                  textAlign: 'flex-start',
                   marginTop: 2
                 }}
               >
-                <InputLabel id="demo-simple-select-label" style={{ marginBottom: -10 }}>Score</InputLabel>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="score"
-                  name="score"
-                  defaultValue="10"
-                />
-                <InputLabel id="demo-simple-select-label" style={{ marginBottom: -10 }}>List</InputLabel>
-                <TextField
-                  margin="normal"
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  width: '100%'
+                }}>
+                  <Rating name="simple-controlled" value={userRating ? userRating : personGame.score / 2} precision={0.5} style={{ marginTop: 2 }} onChange={(event, newValue) => {
+                    setUserRating(newValue);
+                  }} />
+                  <Typography variant="h5" style={{ marginLeft: 10 }}>
+                    {userRating ?
+                      userRating * 2
+                      :
+                      personGame.score
+                    } / 10
+                  </Typography>
+                </div>
+                <InputLabel id="demo-simple-select-label">List</InputLabel>
+                <Select
                   required
                   fullWidth
                   id="list"
                   name="list"
-                  defaultValue={listType}
-                />
+                  defaultValue={personGame.list.toLowerCase()}
+                  style={{ marginBottom: 10 }}
+                >
+                  <MenuItem value="planned">
+                    Planned
+                  </MenuItem>
+                  <MenuItem value="playing">
+                    Playing
+                  </MenuItem>
+                  <MenuItem value="completed">
+                    Completed
+                  </MenuItem>
+                  <MenuItem value="dropped">
+                    Dropped
+                  </MenuItem>
+                  <MenuItem value="onhold">
+                    On hold
+                  </MenuItem>
+                </Select>
+                <InputLabel id="demo-simple-select-label">Platform used for playing</InputLabel>
+                <Select
+                  required
+                  fullWidth
+                  id="playedPlatform"
+                  name="playedPlatform"
+                  defaultValue={personGame.playedPlatform? personGame.playedPlatform.id : null}
+                  style={{ marginBottom: 10 }}
+                >
+                  {personGame.game.platforms.map((el) => (
+                    <MenuItem value={el.id} key={el.id}>
+                      {el.name}
+                    </MenuItem>
+                  ))}
+                </Select>
                 <InputLabel id="demo-simple-select-label" style={{ marginBottom: -10 }}>Comment</InputLabel>
                 <TextField
                   multiline
@@ -363,16 +298,13 @@ const UserListGames = () => {
                   fullWidth
                   id="comment"
                   name="comment"
-                  defaultValue="Best!!!"
+                  defaultValue={personGame.comment}
                 />
-                <FormControlLabel control={<Checkbox defaultChecked />} label="Favourite" style={{ float: 'left', marginTop: -2}} />
+                <FormControlLabel control={<Checkbox defaultChecked={favourite} onChange={(event) => setFavourite(event.target.checked)} />} label="Favourite" style={{ float: 'left', marginTop: -2 }} />
                 <Button
                   type="submit"
                   variant="contained"
                   sx={{ mt: 3, mb: 2, float: 'right' }}
-                  onClick={() => {
-                    setOpenModal(false)
-                  }}
                 >
                   Save
                 </Button>
@@ -397,9 +329,9 @@ const UserListGames = () => {
                 </Button>
               </Box>
             </Box>
-          </Box>
-        </Container>
-      </Modal>
+          </Container>
+        </Modal>
+      )}
     </ThemeProvider>
   )
 }

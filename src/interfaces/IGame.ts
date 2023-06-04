@@ -36,6 +36,31 @@ export interface IGameSingle {
   systemRequirements: IRequirements[],
 }
 
+export interface IPersonGame {
+  id: string,
+  game: {
+    id: number,
+    name: string,
+    picturePath: string,
+    status: string,
+    releaseDate?: string,
+    description?: string,
+    nsfw: boolean,
+    type: string,
+    rating: IRating,
+    developers: IDeveloper[],
+    publishers: IPublisher[],
+    platforms: IPlatform[],
+    genres: IGenre[],
+    tags: ITag[],
+  },
+  score: number | null,
+  comment: string | null,
+  list: string,
+  playedPlatform: string | null,
+  favourite: boolean
+}
+
 export interface IRating {
   id: number,
   totalRating: number,
