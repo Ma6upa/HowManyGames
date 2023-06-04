@@ -70,10 +70,6 @@ const UserListGames = () => {
     fetchGames()
   }
 
-  useEffect(() => {
-    console.log(personGame)
-  }, [personGame])
-
   const fetchGames = async () => {
     const res = await fetchPersonGames({
       userId: user?.user.id,
