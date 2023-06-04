@@ -45,6 +45,8 @@ const GamePage = () => {
   const [userList, setUserList] = useState('')
   const [review, setReview] = useState<string | null>(null)
   const [reviewError, setReviewError] = useState<string | null>(null)
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  const [alreadyReviewed, setAlredyReviewed] = useState(false)
   const { user } = useAppSelector(state => state.userReducer)
   const [personGame, setPersonGame] = useState<IPersonGame | null>(null)
   const navigate = useNavigate()
@@ -101,6 +103,18 @@ const GamePage = () => {
       updatePesonGame(personGameData)
     }
   }, [userList])
+
+  useEffect(() => {
+    if (user?.user.userRoles[1]) setIsAdmin(user?.user.userRoles[1].roleName === 'admin')
+  }, [user])
+
+  useEffect(() => {
+    if(reviews && user) {
+      reviews.forEach((item) => {
+        if (item.user.id === user.user.id) setAlredyReviewed(true) 
+      })
+    }
+  }, [reviews, user])
 
   const handleClose = () => {
     setOpenModal(false)
@@ -318,17 +332,19 @@ const GamePage = () => {
                   </Card>
                   <Card variant='outlined' style={{
                     width: '100%',
-                    marginTop: 2
                   }}>
-                    <Typography variant="h5">
-                      Developer
-                    </Typography>
+                    {game?.developers.length && (
+                      <Typography variant="h5">
+                        {game?.developers.length > 1 ? 'Developers' : 'Developer'}
+                      </Typography>
+                    )}
                     {game?.developers.map((item, index) => (
                       <div style={{
                         width: '100%',
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        marginTop: 10
                       }}>
                         <Link to={'/developer/' + item.id}>
                           <div>
@@ -342,16 +358,18 @@ const GamePage = () => {
                   </Card>
                   <Card variant='outlined' style={{
                     width: '100%',
-                    marginTop: 2
                   }}>
-                    <Typography variant="h5">
-                      Publisher
-                    </Typography>
+                    {game?.publishers.length && (
+                      <Typography variant="h5">
+                        {game?.publishers.length > 1 ? 'Publishers' : 'Publisher'}
+                      </Typography>
+                    )}
                     {game?.publishers.map((item, index) => (
                       <div style={{
                         width: '100%',
                         display: 'flex',
-                        flexDirection: 'row'
+                        flexDirection: 'row',
+                        marginTop: 10
                       }}>
                         <Link to={'/publisher/' + item.id}>
                           <div>
@@ -503,7 +521,7 @@ const GamePage = () => {
                 </Box>
               </Card>
             </Box>
-            {user && personGame && (
+            {user && personGame && !alreadyReviewed && (
               <Accordion style={{ marginTop: 10, width: '100%' }}>
                 <AccordionSummary>
                   <Typography variant="h6">
