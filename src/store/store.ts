@@ -11,6 +11,9 @@ import { searchAPI } from "./api/searchApi";
 import { pictureAPI } from "./api/pictureApi";
 import { reviewAPI } from "./api/reviewApi";
 import { personGameAPI } from "./api/personGameApi";
+import { tagsAPI } from "./api/tagsApi";
+import { genresAPI } from "./api/genresApi";
+import { platformsAPI } from "./api/platformsApi";
 
 const rootReducer = combineReducers({
   userReducer,
@@ -25,6 +28,9 @@ const rootReducer = combineReducers({
   [pictureAPI.reducerPath]: pictureAPI.reducer,
   [reviewAPI.reducerPath]: reviewAPI.reducer,
   [personGameAPI.reducerPath]: personGameAPI.reducer,
+  [tagsAPI.reducerPath]: tagsAPI.reducer,
+  [genresAPI.reducerPath]: genresAPI.reducer,
+  [platformsAPI.reducerPath]: platformsAPI.reducer,
 })
 
 export const setupStore = () => {
@@ -42,6 +48,9 @@ export const setupStore = () => {
     .concat(pictureAPI.middleware)
     .concat(reviewAPI.middleware)
     .concat(personGameAPI.middleware)
+    .concat(tagsAPI.middleware)
+    .concat(genresAPI.middleware)
+    .concat(platformsAPI.middleware)
   })
 }
 
