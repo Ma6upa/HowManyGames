@@ -8,7 +8,7 @@ export const platformsAPI = createApi({
   endpoints: (build) => ({
     fetchAllPlatforms: build.query<IDeveloper[], void>({
       query: () => ({
-        url: '/platformAll',
+        url: '/platfrormAll',
       })
     }),
     fetchPlatform: build.query<IPlatform, number>({
@@ -38,7 +38,7 @@ export const platformsAPI = createApi({
         method: 'DELETE',
         headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
         params: {
-          platformDelete: id
+          platfromDelete: id
         }
       })
     }),
