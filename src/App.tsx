@@ -22,6 +22,7 @@ import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
 import TagIcon from '@mui/icons-material/Tag';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import ComputerIcon from '@mui/icons-material/Computer';
+import AddIcon from '@mui/icons-material/Add';
 import { userAPI } from "./store/api/userApi";
 import { userSlice } from "./store/reducers/UserSlice";
 import UserPage from "./pages/UserPage";
@@ -33,6 +34,7 @@ import DeveloperPage from "./pages/DeveloperPage";
 import PublisherPage from "./pages/PublisherPage";
 import DevelopersPublishersEditPage from "./pages/DevelopersEditPage";
 import TagsGenresPlatformsEditPage from "./pages/TagsGenresPlatformsEditPage";
+import CreateGamePage from "./pages/CreateGamePage";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -284,6 +286,25 @@ const App = () => {
                     </Link>
                   </MenuItem>
                 )}
+                {isAdmin && (
+                  <MenuItem onClick={handleClose}>
+                    <Link to={'/createGame'} style={{ textDecoration: 'none', color: 'black' }}>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 2
+                      }}>
+                        <AddIcon />
+                        <Typography variant="h6" style={{
+                          marginLeft: 5,
+                          marginTop: -3
+                        }}>
+                          Create game
+                        </Typography>
+                      </div>
+                    </Link>
+                  </MenuItem>
+                )}
                 <MenuItem onClick={handleClose}>
                   <div
                     style={{
@@ -320,6 +341,7 @@ const App = () => {
         <Route path="/statistics" element={<StatisticsPage />} />
         <Route path="/edit/:entity" element={<DevelopersPublishersEditPage />} />
         <Route path="/editCreate/:entity" element={<TagsGenresPlatformsEditPage />} />
+        <Route path="/createGame" element={<CreateGamePage />} />
       </Routes>
     </>
   )
