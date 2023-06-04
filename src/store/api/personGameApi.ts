@@ -13,6 +13,14 @@ interface IPersonGameBody {
   }
 }
 
+interface INewPersonGame {
+  personGameData: {
+    userId: number,
+    gameId: number,
+    list: string
+  }
+}
+
 export const personGameAPI = createApi({
   reducerPath: 'personGameAPI',
   baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API + '/api/PersonGame' }),
@@ -54,6 +62,14 @@ export const personGameAPI = createApi({
         params: {
           personGameDelete: id
         }
+      })
+    }),
+    addPersonGame: build.mutation<string, INewPersonGame>({
+      query: ( personGameData ) => ({
+        url: '/addPersonGame',
+        method: 'POST',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        body: personGameData
       })
     }),
   })

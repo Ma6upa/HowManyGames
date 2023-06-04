@@ -31,10 +31,12 @@ const GamePage = () => {
   const theme = createTheme();
   const { id } = useParams();
   const { data: game, isLoading } = gamesAPI.useGetGameQuery(Number(id))
+  const [fetchGame] = gamesAPI.useLazyGetGameQuery()
   const { data: reviews, isLoading: isReviewsLoading } = gamesAPI.useGetGameReviewsQuery(Number(id))
   const [createReview] = reviewAPI.useCreateReviewMutation()
   const [getPersonGame] = personGameAPI.useUserHaveThisPersonGameMutation()
   const [updatePesonGame] = personGameAPI.useUpdatePersonGameMutation()
+  const [addPersonGame] = personGameAPI.useAddPersonGameMutation()
   const [openModal, setOpenModal] = useState(false)
   const [gameGenres, setGameGenres] = useState('Genres not found')
   const [gamePlatforms, setGamePlatforms] = useState('Platforms not found')
@@ -125,6 +127,18 @@ const GamePage = () => {
     }
   }
 
+  const handleAddPersonGame = async () => {
+    if (user && game) {
+      const personGameData = {
+        userId: user.user.id,
+        gameId: game.id,
+        list: 'planned'
+      }
+      await addPersonGame(personGameData)
+      navigate(0)
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="lg">
@@ -173,7 +187,13 @@ const GamePage = () => {
                 }} alt="No picture" />
                 {!personGame && (
                   <Button
-                    onClick={() => setOpenModal(true)}
+                    onClick={() => {
+                      if (user) {
+                        handleAddPersonGame()
+                      } else {
+                        setOpenModal(true)
+                      }
+                    }}
                     style={{ left: 0 }}
                   >
                     Add to list +
@@ -307,7 +327,8 @@ const GamePage = () => {
                       <div style={{
                         width: '100%',
                         display: 'flex',
-                        flexDirection: 'row'
+                        flexDirection: 'row',
+                        justifyContent: 'center'
                       }}>
                         <Link to={'/developer/' + item.id}>
                           <div>
