@@ -190,7 +190,8 @@ const UserPage = () => {
                     <div style={{
                       display: 'flex',
                       flexDirection: 'row',
-                      marginTop: 5
+                      marginTop: 5,
+                      marginLeft: 10
                     }}>
                       <div style={{
                         backgroundColor: `${item.color}`,
@@ -204,7 +205,7 @@ const UserPage = () => {
                       </Typography>
                       <p style={{
                         color: 'gray',
-                        marginTop: 6,
+                        marginTop: 5,
                         marginLeft: 5
                       }}>
                         ({item.count})
