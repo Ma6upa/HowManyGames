@@ -1,10 +1,8 @@
 import { Link, useParams } from "react-router-dom";
 import {
   Box,
-  Button,
   Container,
   CssBaseline,
-  TextField,
   ThemeProvider,
   Typography,
   createTheme,
@@ -13,18 +11,47 @@ import {
 } from "@mui/material"
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import { useAppSelector } from "../hooks/redux";
+import { userAPI } from "../store/api/userApi";
+import { useEffect, useState } from "react";
+import { IUser } from "../interfaces/IUser";
 
 
 const UserPage = () => {
   const { id } = useParams();
   const theme = createTheme();
-  const { user } = useAppSelector(state => state.userReducer);
+  const [user, setUser] = useState<IUser | null>(null)
+  const [error, setError] = useState(false)
+  const [fetchUser] = userAPI.useFetchUserMutation()
+
+  useEffect(() => {
+    getUser(id)
+  }, [id])
+
+  const getUser = async (id: number) => {
+    const res = await fetchUser(id)
+    if ('data' in res) setUser(res.data)
+    if ('error' in res) setError(true)
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="lg">
         <CssBaseline />
+        {error && (
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginBottom: 8
+            }}
+          >
+            <Typography component="h1" variant="h4" style={{ color: '#d0342c' }}>
+              Error getting user data, please make sure that such user exists and try again
+            </Typography>
+          </Box>
+        )}
         {user && (
           <Box
             sx={{
@@ -61,17 +88,17 @@ const UserPage = () => {
                 <Typography variant="h5">
                   Game Lists
                 </Typography>
-                  <Typography variant="h6">
+                <Typography variant="h6">
                   <Link to={'/completed/Planned'} style={{ textDecoration: 'none', color: 'black' }}> Planed </Link>
-                    / 
+                  /
                   <Link to={'/completed/Playing'} style={{ textDecoration: 'none', color: 'black' }}> Playing </Link>
-                    / 
+                  /
                   <Link to={'/completed/Completed'} style={{ textDecoration: 'none', color: 'black' }}> Completed </Link>
-                    / 
+                  /
                   <Link to={'/completed/Dropped'} style={{ textDecoration: 'none', color: 'black' }}> Dropped </Link>
-                    / 
+                  /
                   <Link to={'/completed/Onhold'} style={{ textDecoration: 'none', color: 'black' }}> On hold </Link>
-                  </Typography>
+                </Typography>
               </Box>
             </Box>
             <Card variant="outlined" style={{
