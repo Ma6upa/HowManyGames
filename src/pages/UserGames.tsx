@@ -31,6 +31,7 @@ const UserListGames = () => {
   const [openModal, setOpenModal] = useState(false)
   const [fetchPersonGames] = personGameAPI.useFetchPersonGamesMutation()
   const [updatePesonGame] = personGameAPI.useUpdatePersonGameMutation()
+  const [deletePersonGame] = personGameAPI.useDeletePersonGameMutation()
   const [personGames, setPersonGames] = useState<IPersonGame[]>([])
   const [personGame, setPersonGame] = useState<IPersonGame | null>(null)
   const [userRating, setUserRating] = useState(0)
@@ -61,6 +62,12 @@ const UserListGames = () => {
     setFavourite(false)
     setUserRating(0)
     setOpenModal(false)
+  }
+
+  const handleDelete = async () => {
+    await deletePersonGame(personGame?.id)
+    setOpenModal(false)
+    fetchGames()
   }
 
   useEffect(() => {
@@ -322,9 +329,7 @@ const UserListGames = () => {
                   variant="contained"
                   color="error"
                   sx={{ mt: 3, mb: 2, float: 'right', mr: 2 }}
-                  onClick={() => {
-                    setOpenModal(false)
-                  }}
+                  onClick={handleDelete}
                 >
                   Remove
                 </Button>

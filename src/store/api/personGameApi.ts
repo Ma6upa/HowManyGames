@@ -46,5 +46,15 @@ export const personGameAPI = createApi({
         body: personGameData
       })
     }),
+    deletePersonGame: build.mutation<string, string>({
+      query: (id) => ({
+        url: '/deletePersonGame',
+        method: 'DELETE',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        params: {
+          personGameDelete: id
+        }
+      })
+    }),
   })
 })
