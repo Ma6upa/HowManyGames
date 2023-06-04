@@ -42,7 +42,9 @@ const DevelopersEdit = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (user?.user.userRoles[1].roleName !== 'admin') navigate('/')
+    if (user) {
+      if (user?.user.userRoles[1].roleName !== 'admin') navigate('/')
+    }
   }, [user])
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
