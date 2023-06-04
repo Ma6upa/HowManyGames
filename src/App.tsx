@@ -35,6 +35,7 @@ import PublisherPage from "./pages/PublisherPage";
 import DevelopersPublishersEditPage from "./pages/DevelopersEditPage";
 import TagsGenresPlatformsEditPage from "./pages/TagsGenresPlatformsEditPage";
 import CreateGamePage from "./pages/CreateGamePage";
+import EditGamePage from "./pages/EditGamePage";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -342,6 +343,7 @@ const App = () => {
         <Route path="/edit/:entity" element={<DevelopersPublishersEditPage />} />
         <Route path="/editCreate/:entity" element={<TagsGenresPlatformsEditPage />} />
         <Route path="/createGame" element={<CreateGamePage />} />
+        <Route path="/editGame/:id" element={<EditGamePage />} />
       </Routes>
     </>
   )

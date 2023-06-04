@@ -74,5 +74,13 @@ export const gamesAPI = createApi({
         body: game
       })
     }),
+    updateGame: build.mutation<string, IGame>({
+      query: (game) => ({
+        url: '/updateGame',
+        method: 'PUT',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}` },
+        body: game
+      })
+    }),
   })
 })

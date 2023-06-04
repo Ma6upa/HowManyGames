@@ -38,6 +38,7 @@ const GamePage = () => {
   const [updatePesonGame] = personGameAPI.useUpdatePersonGameMutation()
   const [addPersonGame] = personGameAPI.useAddPersonGameMutation()
   const [openModal, setOpenModal] = useState(false)
+  const [openModalDelete, setOpenDeleteModal] = useState(false)
   const [gameGenres, setGameGenres] = useState('Genres not found')
   const [gamePlatforms, setGamePlatforms] = useState('Platforms not found')
   const [gameTags, setGameTags] = useState('Tags not found')
@@ -109,15 +110,23 @@ const GamePage = () => {
   }, [user])
 
   useEffect(() => {
-    if(reviews && user) {
+    if (reviews && user) {
       reviews.forEach((item) => {
-        if (item.user.id === user.user.id) setAlredyReviewed(true) 
+        if (item.user.id === user.user.id) setAlredyReviewed(true)
       })
     }
   }, [reviews, user])
 
   const handleClose = () => {
     setOpenModal(false)
+  }
+
+  const handleDeleteClose = () => {
+    setOpenDeleteModal(false)
+  }
+
+  const handleDelete = async () => {
+    console.log('game delete')
   }
 
   const handleReview = async () => {
@@ -181,13 +190,45 @@ const GamePage = () => {
               marginBottom: 10
             }}
           >
-            <Typography component="h1" variant="h4">
-              {game?.name}
-            </Typography>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'row',
+            }}>
+              <Typography component="h1" variant="h4">
+                {game?.name}
+              </Typography>
+              {isAdmin && (
+                <Box sx={{
+                  marginTop: 1
+                }}>
+                  <Button
+                    variant="contained"
+                    style={{
+                      marginLeft: 20
+                    }}
+                  >
+                    <Link to={'/editGame/' + game.id} style={{ textDecoration: 'none', color: 'white' }}>
+                      EDIT GAME
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    style={{
+                      marginLeft: 20
+                    }}
+                    onClick={() => setOpenDeleteModal(true)}
+                  >
+                    DELETE GAME
+                  </Button>
+                </Box>
+              )}
+            </Box>
             <Box sx={{
               width: '100%',
               display: 'flex',
-              flexDirection: 'row'
+              flexDirection: 'row',
+              marginTop: 2
             }}>
               <Box sx={{
                 width: '25%',
@@ -705,6 +746,53 @@ const GamePage = () => {
                 <Typography variant="h4">
                   You have to be logged in to use this option
                 </Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
+      </Modal>
+      <Modal
+        open={openModalDelete}
+        onClose={handleDeleteClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Container component="main" maxWidth="sm">
+          <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            marginTop: '10%',
+            borderRadius: 5,
+            height: 300
+          }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant="h6" style={{ marginTop: 20 }}>
+                Are you sure you want to delete this game?
+              </Typography>
+              <Divider />
+              <Box
+                sx={{
+                  width: '90%',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  marginTop: 10
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleDelete}
+                >
+                  DELETE GAME
+                </Button>
               </Box>
             </Box>
           </Box>
