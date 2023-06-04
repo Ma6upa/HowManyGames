@@ -48,11 +48,12 @@ const UserListGames = () => {
       playedPlatform: data.get('playedPlatform'),
       favourite: favourite
     }
-    updatePesonGame(personGameData)
+    await updatePesonGame(personGameData)
     setOpenModal(false)
     setPersonGame(null)
     setFavourite(false)
     setUserRating(0)
+    fetchGames()
   }
 
   const handleClose = () => {
