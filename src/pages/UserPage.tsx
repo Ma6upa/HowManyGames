@@ -20,13 +20,43 @@ const UserPage = () => {
   const { id } = useParams();
   const theme = createTheme();
   const [user, setUser] = useState<IUser | null>(null)
-  const [error, setError] = useState(false)
+  const [platformsAll, setPlatformsAll] = useState(0)
+  const [publishersAll, setPublisherAll] = useState(0)
+  const [developersAll, setDevelopersAll] = useState(0)
+  const [tagsAll, setTagsAll] = useState(0)
   const [fetchUser] = userAPI.useFetchUserMutation()
   const navigate = useNavigate()
 
   useEffect(() => {
     getUser(id)
   }, [id])
+
+  useEffect(() => {
+    let countPlatformsAll = 0
+    let countPublisherAll = 0
+    let countDeveloperAll = 0
+    let countTagsAll = 0
+
+    if (user) {
+      user.platformStatistic.forEach((item) => {
+        countPlatformsAll += item.count
+      })
+      user.publisherStatistic.forEach((item) => {
+        countPublisherAll += item.count
+      })
+      user.developerStatistic.forEach((item) => {
+        countDeveloperAll += item.count
+      })
+      user.tagStatistic.forEach((item) => {
+        countTagsAll += item.count
+      })
+    }
+
+    setPlatformsAll(countPlatformsAll)
+    setPublisherAll(countPublisherAll)
+    setDevelopersAll(countDeveloperAll)
+    setTagsAll(countTagsAll)
+  }, [user])
 
   const getUser = async (id: number) => {
     const res = await fetchUser(id)
@@ -143,86 +173,44 @@ const UserPage = () => {
                   flexDirection: 'row',
                   width: '100%',
                   height: 50,
+                  padding: 0,
+                  borderRadius: 10,
+                  overflow: 'hidden'
                 }}>
-                  <div style={{ width: '33%', height: 50, backgroundColor: '#2596be', borderRadius: '10px 0 0 10px' }}></div>
-                  <div style={{ width: '33%', height: 50, backgroundColor: '#66b973' }}></div>
-                  <div style={{ width: '33%', height: 50, backgroundColor: '#d24e4e', borderRadius: '0 10px 10px 0' }}></div>
+
+                  {user.platformStatistic.map((item) => (
+                    <div style={{ width: `${Math.floor((item.count / platformsAll) * 100)}%`, height: 50, backgroundColor: `${item.color}` }} key={item.id}></div>
+                  ))}
                 </div>
                 <div style={{
                   display: 'flex',
                   flexDirection: 'row',
                 }}>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginTop: 5
-                  }}>
+                  {user.platformStatistic.map((item) => (
                     <div style={{
-                      backgroundColor: '#2596be',
-                      width: 15,
-                      height: 15,
-                      borderRadius: 8,
-                      marginTop: 7
-                    }}></div>
-                    <Typography variant="h6" style={{ marginLeft: 5 }}>
-                      PC
-                    </Typography>
-                    <p style={{
-                      color: 'gray',
-                      marginTop: 4,
-                      marginLeft: 5
+                      display: 'flex',
+                      flexDirection: 'row',
+                      marginTop: 5
                     }}>
-                      (15)
-                    </p>
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginLeft: 15,
-                    marginTop: 5
-                  }}>
-                    <div style={{
-                      backgroundColor: '#66b973',
-                      width: 15,
-                      height: 15,
-                      borderRadius: 8,
-                      marginTop: 7
-                    }}></div>
-                    <Typography variant="h6" style={{ marginLeft: 5 }}>
-                      XBOX ONE
-                    </Typography>
-                    <p style={{
-                      color: 'gray',
-                      marginTop: 4,
-                      marginLeft: 5
-                    }}>
-                      (15)
-                    </p>
-                  </div>
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    marginLeft: 15,
-                    marginTop: 5
-                  }}>
-                    <div style={{
-                      backgroundColor: '#d24e4e',
-                      width: 15,
-                      height: 15,
-                      borderRadius: 8,
-                      marginTop: 7
-                    }}></div>
-                    <Typography variant="h6" style={{ marginLeft: 5 }}>
-                      NINTENDO
-                    </Typography>
-                    <p style={{
-                      color: 'gray',
-                      marginTop: 4,
-                      marginLeft: 5
-                    }}>
-                      (15)
-                    </p>
-                  </div>
+                      <div style={{
+                        backgroundColor: `${item.color}`,
+                        width: 15,
+                        height: 15,
+                        borderRadius: 8,
+                        marginTop: 9
+                      }}></div>
+                      <Typography variant="h6" style={{ marginLeft: 5 }}>
+                        {item.name}
+                      </Typography>
+                      <p style={{
+                        color: 'gray',
+                        marginTop: 6,
+                        marginLeft: 5
+                      }}>
+                        ({item.count})
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
             </Card>
@@ -241,81 +229,40 @@ const UserPage = () => {
                   GAMES BY PUBLISHERS
                 </Typography>
                 <Divider />
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    1 Forever Entert.
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (5)
-                  </p>
+                {user.publisherStatistic.map((item) => (
                   <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 100,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between'
                   }}>
+                    <Typography variant='h6'>
+                      {item.name}
+                    </Typography>
+                    <Box sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '50%'
+                    }}>
+                      <p style={{
+                        color: 'gray',
+                        marginTop: 5,
+                        marginLeft: 5
+                      }}>
+                        ({item.count})
+                      </p>
+                      <div style={{
+                        height: 5,
+                        backgroundColor: '#019862',
+                        marginTop: 15,
+                        marginLeft: 10,
+                        borderRadius: 5,
+                        width: `${Math.floor((item.count / publishersAll) * 100)}%`,
+                      }}>
+                      </div>
+                    </Box>
                   </div>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    1 Valve Software
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (4)
-                  </p>
-                  <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 80,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5,
-                  }}>
-                  </div>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    3 Team Cherrycc
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (3)
-                  </p>
-                  <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 60,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5,
-                  }}>
-                  </div>
-                </div>
+                ))}
               </Card>
               <Card variant="outlined" style={{
                 width: '30%',
@@ -326,81 +273,40 @@ const UserPage = () => {
                   GAMES BY TAGS
                 </Typography>
                 <Divider />
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    1 Indie-g
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (5)
-                  </p>
+                {user.tagStatistic.map((item) => (
                   <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 100,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between'
                   }}>
+                    <Typography variant='h6'>
+                      {item.name}
+                    </Typography>
+                    <Box sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '50%'
+                    }}>
+                      <p style={{
+                        color: 'gray',
+                        marginTop: 5,
+                        marginLeft: 5
+                      }}>
+                        ({item.count})
+                      </p>
+                      <div style={{
+                        height: 5,
+                        backgroundColor: '#019862',
+                        marginTop: 15,
+                        marginLeft: 10,
+                        borderRadius: 5,
+                        width: `${Math.floor((item.count / tagsAll) * 100)}%`,
+                      }}>
+                      </div>
+                    </Box>
                   </div>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    1 Action.
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (4)
-                  </p>
-                  <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 80,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5,
-                  }}>
-                  </div>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    3 Adven.
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (3)
-                  </p>
-                  <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 60,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5,
-                  }}>
-                  </div>
-                </div>
+                ))}
               </Card>
               <Card variant="outlined" style={{
                 width: '30%',
@@ -411,81 +317,40 @@ const UserPage = () => {
                   GAMES BY DEVELOPERS
                 </Typography>
                 <Divider />
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    1 Forever Entert.
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (5)
-                  </p>
+                {user.developerStatistic.map((item) => (
                   <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 100,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-between'
                   }}>
+                    <Typography variant='h6'>
+                      {item.name}
+                    </Typography>
+                    <Box sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      width: '50%'
+                    }}>
+                      <p style={{
+                        color: 'gray',
+                        marginTop: 5,
+                        marginLeft: 5
+                      }}>
+                        ({item.count})
+                      </p>
+                      <div style={{
+                        height: 5,
+                        backgroundColor: '#019862',
+                        marginTop: 15,
+                        marginLeft: 10,
+                        borderRadius: 5,
+                        width: `${Math.floor((item.count / developersAll) * 100)}%`,
+                      }}>
+                      </div>
+                    </Box>
                   </div>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    1 Valve Software
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (4)
-                  </p>
-                  <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 80,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5,
-                  }}>
-                  </div>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%'
-                }}>
-                  <Typography variant='h6'>
-                    3 Team Cherrycc
-                  </Typography>
-                  <p style={{
-                    color: 'gray',
-                    marginTop: 5,
-                    marginLeft: 5
-                  }}>
-                    (3)
-                  </p>
-                  <div style={{
-                    height: 5,
-                    backgroundColor: '#019862',
-                    width: 60,
-                    marginTop: 15,
-                    marginLeft: 10,
-                    borderRadius: 5,
-                  }}>
-                  </div>
-                </div>
+                ))}
               </Card>
             </Box>
             <Card variant="outlined" style={{

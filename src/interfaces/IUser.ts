@@ -11,8 +11,8 @@ export interface IUser {
     registrationdDate: string,
     userRoles: IUserRole[],
   }
-  favouriteGames: IGameSingle[] | null,
-  publisherStatistic: IPublisherStatistic[] | null,
+  favouriteGames: IGameSingle[],
+  publisherStatistic: IPublisherStatistic[],
   tagStatistic: ITagStatistic[],
   developerStatistic: IDeveloperStatistic[],
   platformStatistic: IPlatformStatistic[],
@@ -45,5 +45,6 @@ export interface IDeveloperStatistic {
 export interface IPlatformStatistic {
   id: number,
   name: string,
+  color: string,
   count: number,
 }
