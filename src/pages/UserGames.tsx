@@ -46,7 +46,7 @@ const UserListGames = () => {
       score: userRating > 0 ? userRating * 2 : personGame?.score,
       comment: data.get('comment')?.toString(),
       list: data.get('list')?.toString(),
-      playedPlatform: data.get('playedPlatform'),
+      playedPlatform: data.get('playedPlatform')? data.get('playedPlatform') : 0,
       favourite: favourite
     }
     await updatePesonGame(personGameData)
