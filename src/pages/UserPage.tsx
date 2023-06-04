@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Container,
@@ -22,6 +22,7 @@ const UserPage = () => {
   const [user, setUser] = useState<IUser | null>(null)
   const [error, setError] = useState(false)
   const [fetchUser] = userAPI.useFetchUserMutation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     getUser(id)
@@ -30,28 +31,13 @@ const UserPage = () => {
   const getUser = async (id: number) => {
     const res = await fetchUser(id)
     if ('data' in res) setUser(res.data)
-    if ('error' in res) setError(true)
+    if ('error' in res) navigate('/')
   }
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="lg">
         <CssBaseline />
-        {error && (
-          <Box
-            sx={{
-              marginTop: 8,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              marginBottom: 8
-            }}
-          >
-            <Typography component="h1" variant="h4" style={{ color: '#d0342c' }}>
-              Error getting user data, please make sure that such user exists and try again
-            </Typography>
-          </Box>
-        )}
         {user && (
           <Box
             sx={{
