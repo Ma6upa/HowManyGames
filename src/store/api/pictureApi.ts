@@ -64,5 +64,16 @@ export const pictureAPI = createApi({
         body: publisherData.data
       })
     }),
+    uploadGamePicture: build.mutation<string, PictureId>({
+      query: (gameData) => ({
+        url: '/uploadGamePicture',
+        method: 'PUT',
+        headers: { Authorization: `bearer ${localStorage.getItem('token')}`},
+        params: {
+          gameId: gameData.id
+        },
+        body: gameData.data
+      })
+    }),
   })
 })

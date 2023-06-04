@@ -23,6 +23,7 @@ import {
 import { useAppSelector } from "../hooks/redux";
 import { FiltersAndConstsAPI } from "../store/api/filterAndConsts";
 import { gamesAPI } from "../store/api/gamesApi";
+import { pictureAPI } from "../store/api/pictureApi";
 
 const EditGamePage = () => {
   const theme = createTheme();
@@ -33,6 +34,8 @@ const EditGamePage = () => {
   const { id } = useParams()
   const { data: game, isLoading } = gamesAPI.useGetGameQuery(id)
   const [updateGame] = gamesAPI.useUpdateGameMutation()
+  const [updateGamePicture] = pictureAPI.useUploadGamePictureMutation()
+  const reader = new FileReader();
 
   const [released, setRelease] = useState(false)
   const [nsfw, setNsfw] = useState(false)
@@ -41,6 +44,8 @@ const EditGamePage = () => {
   const [platform, setPlatform] = useState<any[]>([])
   const [developer, setDeveloper] = useState<any[]>([])
   const [publisher, setPublisher] = useState<any[]>([])
+  const [gamePicture, setGamePicture] = useState<string | null>(null)
+  const [pictureUpdated, setPictureUpdated] = useState<boolean>(false)
 
   useEffect(() => {
     if (user) {
@@ -61,6 +66,7 @@ const EditGamePage = () => {
       let publishersAll: any[] = []
 
       setNsfw(game.nsfw)
+      setGamePicture(import.meta.env.VITE_API + game.picturePath)
 
       game.tags.forEach((item) => {
         tagsAll.push(item.id)
@@ -134,6 +140,15 @@ const EditGamePage = () => {
       genres: genre,
       tags: tag,
     }
+    if (pictureUpdated) {
+      let picFormData = new FormData()
+      picFormData.append('pic', data.get('gamePicture'))
+      const pictureData = {
+        id: id,
+        data: picFormData,
+      }
+      await updateGamePicture(pictureData)
+    }
     await updateGame(gameData)
     navigate('/')
   }
@@ -169,6 +184,42 @@ const EditGamePage = () => {
               Edit game
             </Typography>
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+              <Box sx={{
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+                <img src={gamePicture} style={{
+                  width: 270,
+                  height: 350,
+                  marginTop: 20
+                }} alt="No picture" />
+                <Button
+                  variant="contained"
+                  component="label"
+                  style={{
+                    float: 'right',
+                    width: 270,
+                    marginTop: 10
+                  }}
+                >
+                  New developer picture
+                  <input
+                    type="file"
+                    accept="image/png, image/webp, image/jpeg, image/jpg"
+                    name="gamePicture"
+                    id="gamePicture"
+                    onChange={(e) => {
+                      const file = e.target.files![0];
+                      reader.readAsDataURL(file)!
+                      reader.onloadend = () => {
+                        setPictureUpdated(true)
+                        setGamePicture(reader.result as string)
+                      };
+                    }}
+                    hidden
+                  />
+                </Button>
+              </Box>
               <TextField
                 margin="normal"
                 required
