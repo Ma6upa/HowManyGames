@@ -19,6 +19,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import CodeIcon from '@mui/icons-material/Code';
 import PublishedWithChangesIcon from '@mui/icons-material/PublishedWithChanges';
+import TagIcon from '@mui/icons-material/Tag';
+import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
+import ComputerIcon from '@mui/icons-material/Computer';
 import { userAPI } from "./store/api/userApi";
 import { userSlice } from "./store/reducers/UserSlice";
 import UserPage from "./pages/UserPage";
@@ -29,6 +32,7 @@ import SearchAutocomplete from "./components/searchAutocomplete";
 import DeveloperPage from "./pages/DeveloperPage";
 import PublisherPage from "./pages/PublisherPage";
 import DevelopersPublishersEditPage from "./pages/DevelopersEditPage";
+import TagsGenresPlatformsEditPage from "./pages/TagsGenresPlatformsEditPage";
 
 const App = () => {
   const { user } = useAppSelector(state => state.userReducer)
@@ -185,24 +189,6 @@ const App = () => {
                     </div>
                   </Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      marginTop: 2
-                    }}
-                    onClick={() => logOut()}
-                  >
-                    <LogoutIcon />
-                    <Typography variant="h6" style={{
-                      marginLeft: 5,
-                      marginTop: -3
-                    }}>
-                      Log out
-                    </Typography>
-                  </div>
-                </MenuItem>
                 {isAdmin && (
                   <MenuItem onClick={handleClose}>
                     <Link to={'/edit/developers'} style={{ textDecoration: 'none', color: 'black' }}>
@@ -241,6 +227,81 @@ const App = () => {
                     </Link>
                   </MenuItem>
                 )}
+                {isAdmin && (
+                  <MenuItem onClick={handleClose}>
+                    <Link to={'/editCreate/tags'} style={{ textDecoration: 'none', color: 'black' }}>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 2
+                      }}>
+                        <TagIcon />
+                        <Typography variant="h6" style={{
+                          marginLeft: 5,
+                          marginTop: -3
+                        }}>
+                          Tags
+                        </Typography>
+                      </div>
+                    </Link>
+                  </MenuItem>
+                )}
+                {isAdmin && (
+                  <MenuItem onClick={handleClose}>
+                    <Link to={'/editCreate/genres'} style={{ textDecoration: 'none', color: 'black' }}>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 2
+                      }}>
+                        <VideogameAssetIcon />
+                        <Typography variant="h6" style={{
+                          marginLeft: 5,
+                          marginTop: -3
+                        }}>
+                          Genres
+                        </Typography>
+                      </div>
+                    </Link>
+                  </MenuItem>
+                )}
+                {isAdmin && (
+                  <MenuItem onClick={handleClose}>
+                    <Link to={'/editCreate/platforms'} style={{ textDecoration: 'none', color: 'black' }}>
+                      <div style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        marginTop: 2
+                      }}>
+                        <ComputerIcon />
+                        <Typography variant="h6" style={{
+                          marginLeft: 5,
+                          marginTop: -3
+                        }}>
+                          Platforms
+                        </Typography>
+                      </div>
+                    </Link>
+                  </MenuItem>
+                )}
+                <MenuItem onClick={handleClose}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      marginTop: 2
+                    }}
+                    onClick={() => logOut()}
+                  >
+                    <LogoutIcon />
+                    <Typography variant="h6" style={{
+                      marginLeft: 5,
+                      marginTop: -3
+                    }}>
+                      Log out
+                    </Typography>
+                  </div>
+                </MenuItem>
               </Menu>
             </div>
           )}
@@ -258,6 +319,7 @@ const App = () => {
         <Route path="/publisher/:id" element={<PublisherPage />} />
         <Route path="/statistics" element={<StatisticsPage />} />
         <Route path="/edit/:entity" element={<DevelopersPublishersEditPage />} />
+        <Route path="/editCreate/:entity" element={<TagsGenresPlatformsEditPage />} />
       </Routes>
     </>
   )
