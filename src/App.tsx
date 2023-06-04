@@ -77,7 +77,7 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    setIsAdmin(user?.user.userRoles[1].roleName === 'admin')
+    if (user?.user.userRoles[1]) setIsAdmin(user?.user.userRoles[1].roleName === 'admin')
   }, [user])
 
   return (
