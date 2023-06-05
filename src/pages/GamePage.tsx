@@ -37,6 +37,7 @@ const GamePage = () => {
   const [getPersonGame] = personGameAPI.useUserHaveThisPersonGameMutation()
   const [updatePesonGame] = personGameAPI.useUpdatePersonGameMutation()
   const [addPersonGame] = personGameAPI.useAddPersonGameMutation()
+  const [deleteGame] = gamesAPI.useDeleteGameMutation()
   const [openModal, setOpenModal] = useState(false)
   const [openModalDelete, setOpenDeleteModal] = useState(false)
   const [gameGenres, setGameGenres] = useState('Genres not found')
@@ -126,7 +127,8 @@ const GamePage = () => {
   }
 
   const handleDelete = async () => {
-    console.log('game delete')
+    await deleteGame(id)
+    navigate('/')
   }
 
   const handleReview = async () => {
