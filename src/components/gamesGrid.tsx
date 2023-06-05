@@ -274,7 +274,7 @@ const GamesGrid = () => {
             }}>
               <FormGroup>
                 {filters?.status.map((item, index) => (
-                  <FormControlLabel key={item} control={<Checkbox defaultChecked={index === 0} onChange={(event) => {
+                  <FormControlLabel key={item} control={<Checkbox defaultChecked={item === 'released'} onChange={(event) => {
                     if (event.target.checked) {
                       if (!status.includes(item)) {
                         setStatus([...status, item])
