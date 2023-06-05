@@ -57,7 +57,7 @@ const CreateGamePage = () => {
     const gameData = {
       name: data.get('name')?.toString() || null,
       status: data.get('status')?.toString() || null,
-      releaseDate: data.get('releaseDate')?.toString() || "9999-12-12",
+      releaseDate: data.get('releaseDate')?.toString() || "2999-12-12",
       description: data.get('description')?.toString() || null,
       ageRating: data.get('ageRating')?.toString() || 0,
       nsfw: nsfw,
