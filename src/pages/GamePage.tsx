@@ -31,7 +31,6 @@ const GamePage = () => {
   const theme = createTheme();
   const { id } = useParams();
   const { data: game, isLoading } = gamesAPI.useGetGameQuery(Number(id))
-  const [fetchGame] = gamesAPI.useLazyGetGameQuery()
   const { data: reviews, isLoading: isReviewsLoading } = gamesAPI.useGetGameReviewsQuery(Number(id))
   const [createReview] = reviewAPI.useCreateReviewMutation()
   const [getPersonGame] = personGameAPI.useUserHaveThisPersonGameMutation()
