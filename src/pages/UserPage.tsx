@@ -14,22 +14,31 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { userAPI } from "../store/api/userApi";
 import { useEffect, useState } from "react";
 import { IUser } from "../interfaces/IUser";
+import { useAppSelector } from "../hooks/redux";
 
 
 const UserPage = () => {
   const { id } = useParams();
   const theme = createTheme();
+  const { user: me } = useAppSelector(state => state.userReducer)
   const [user, setUser] = useState<IUser | null>(null)
   const [platformsAll, setPlatformsAll] = useState(0)
   const [publishersAll, setPublisherAll] = useState(0)
   const [developersAll, setDevelopersAll] = useState(0)
   const [tagsAll, setTagsAll] = useState(0)
+  const [isSameUser, setIsSameUser] = useState(false)
   const [fetchUser] = userAPI.useFetchUserMutation()
   const navigate = useNavigate()
 
   useEffect(() => {
     getUser(id)
   }, [id])
+
+  useEffect(() => {
+    if (me) {
+      if (me.user.id === Number(id)) setIsSameUser(true)
+    }
+  }, [me])
 
   useEffect(() => {
     let countPlatformsAll = 0
@@ -104,17 +113,19 @@ const UserPage = () => {
                 <Typography variant="h5">
                   Game Lists
                 </Typography>
-                <Typography variant="h6">
-                  <Link to={'/completed/Planned'} style={{ textDecoration: 'none', color: 'black' }}> Planed </Link>
-                  /
-                  <Link to={'/completed/Playing'} style={{ textDecoration: 'none', color: 'black' }}> Playing </Link>
-                  /
-                  <Link to={'/completed/Completed'} style={{ textDecoration: 'none', color: 'black' }}> Completed </Link>
-                  /
-                  <Link to={'/completed/Dropped'} style={{ textDecoration: 'none', color: 'black' }}> Dropped </Link>
-                  /
-                  <Link to={'/completed/Onhold'} style={{ textDecoration: 'none', color: 'black' }}> On hold </Link>
-                </Typography>
+                {isSameUser && (
+                  <Typography variant="h6">
+                    <Link to={'/completed/Planned'} style={{ textDecoration: 'none', color: 'black' }}> Planned </Link>
+                    /
+                    <Link to={'/completed/Playing'} style={{ textDecoration: 'none', color: 'black' }}> Playing </Link>
+                    /
+                    <Link to={'/completed/Completed'} style={{ textDecoration: 'none', color: 'black' }}> Completed </Link>
+                    /
+                    <Link to={'/completed/Dropped'} style={{ textDecoration: 'none', color: 'black' }}> Dropped </Link>
+                    /
+                    <Link to={'/completed/Onhold'} style={{ textDecoration: 'none', color: 'black' }}> On hold </Link>
+                  </Typography>
+                )}
               </Box>
             </Box>
             <Card variant="outlined" style={{
